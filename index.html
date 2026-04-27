@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="es-419">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Actuaria Plus</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+  <style>
+/* ===== styles.css ===== */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap');
+:root {
+  --primary: #151F47;
+  --primary-dark: #0e1530;
+  --primary-light: #1e2d5f;
+  --secondary: #25D366;
+  --accent: #E8642C;
+  --background: #F2F2F2;
+  --surface: #FFFFFF;
+  --text-primary: #151F47;
+  --text-secondary: #666666;
+  --text-light: #999999;
+  --border: #E0E0E0;
+  --sidebar-width: 240px;
+  --header-height: 84px;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow-card: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+  --shadow-button: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+  --font-family: 'Nunito', sans-serif;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--font-family);
+  background: var(--background);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow: hidden;
+  height: 100vh;
+}
+.app-layout { display: flex; height: 100vh; overflow: hidden; }
+.sidebar {
+  width: var(--sidebar-width);
+  background: rgba(255,255,255,0.01);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid rgba(199,193,193,0.6);
+  border-radius: 16px;
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  z-index: 20;
+  position: absolute;
+  top: 0; left: 0;
+  margin: 18px;
+  height: calc(100vh - 36px);
+}
+.sidebar-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px; min-height: 50px; margin: 8px;
+}
+.sidebar-body { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.sidebar-search { padding: 12px 12px 8px; position: relative; }
+.sidebar-search input {
+  width: 100%; padding: 8px 12px 8px 36px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text-primary);
+  font-family: var(--font-family); font-size: 13px; outline: none;
+}
+.sidebar-search input::placeholder { color: var(--text-light); }
+.sidebar-search .search-icon {
+  position: absolute; left: 24px; top: 50%; transform: translateY(-50%);
+  color: var(--text-light); pointer-events: none;
+}
+.sidebar-nav { flex: 1; overflow-y: auto; padding: 4px 0; }
+.nav-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 16px; height: 45px;
+  color: rgba(0,0,0,0.87);
+  text-decoration: none; font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: background 0.15s;
+  border: none; background: none; width: 100%; text-align: left;
+  font-family: var(--font-family);
+}
+.nav-item:hover { background: #f0f1f5; }
+.nav-item.active { background: #e7e8ec; color: rgba(0,0,0,0.87); }
+.nav-item .nav-icon { font-size: 20px; width: 24px; text-align: center; color: #8a8fa3; }
+.nav-item .nav-arrow { margin-left: auto; font-size: 18px; transition: transform 0.2s; color: #8a8fa3; }
+.nav-item.expanded .nav-arrow { transform: rotate(180deg); }
+.nav-section-label {
+  padding: 8px 16px 4px;
+  font-size: 9.6px; font-weight: 500;
+  text-transform: uppercase; color: rgba(0,0,0,0.6);
+}
+.nav-sub-items { display: none; padding-left: 0; }
+.nav-sub-items.open { display: block; }
+.nav-sub-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 16px 6px 52px;
+  color: var(--text-secondary); text-decoration: none; font-size: 13px;
+  cursor: pointer; transition: color 0.15s;
+}
+.nav-sub-item:hover, .nav-sub-item.active { color: var(--text-primary); background: #f5f5f5; }
+.nav-sub-item::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.sidebar-footer { padding: 16px; text-align: center; margin: 0 16px 16px; }
+.sidebar-footer .footer-app-name { font-weight: 500; font-size: 13px; color: var(--text-primary); }
+.sidebar-footer .footer-email { font-size: 11px; color: var(--text-secondary); margin: 2px 0; }
+.sidebar-footer .footer-version { font-size: 11px; color: var(--text-light); }
+.main-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding-left: 260px; }
+.top-header {
+  height: var(--header-height);
+  background: var(--primary);
+  display: flex; align-items: center; justify-content: flex-end;
+  padding: 0 24px; flex-shrink: 0;
+  position: fixed; top: 0; left: 8px; right: 0;
+  margin: 8px 14px 0 0;
+  border-radius: 26px; z-index: 10;
+}
+.header-left { display: none; }
+.header-right { display: flex; align-items: center; gap: 16px; }
+.header-notification {
+  position: relative; background: none; border: none;
+  color: white; cursor: pointer; padding: 4px; display: flex; align-items: center;
+}
+.header-notification .badge {
+  position: absolute; top: -2px; right: -4px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--accent); color: white;
+  font-size: 10px; font-weight: 500;
+  display: flex; align-items: center; justify-content: center;
+}
+.header-avatar { display: none; }
+.company-selector {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; background: none; border: none;
+  cursor: pointer; font-family: var(--font-family);
+  font-weight: 500; font-size: 14px; color: white;
+}
+.company-selector .company-logo {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.content-area { flex: 1; overflow-y: auto; padding: 0; padding-top: 64px; }
+.content-inner { padding: 24px; margin-top: 16px; }
+.greeting-section { margin-bottom: 12px; }
+.greeting-section h1 { font-size: 32px; font-weight: 500; color: var(--primary); line-height: 37px; }
+.greeting-section .last-connection { font-size: 14px; color: var(--primary); font-weight: 500; margin-top: 2px; }
+.module-tabs { display: flex; gap: 6px; margin-bottom: 24px; flex-wrap: wrap; }
+.module-tab {
+  padding: 0 12px; height: 32px; border: none;
+  background: #e9eaee;
+  font-family: var(--font-family); font-size: 13px; font-weight: 500;
+  color: #181E3A; cursor: pointer;
+  border-radius: 16px; transition: all 0.2s;
+  white-space: nowrap; text-decoration: none;
+  display: inline-flex; align-items: center;
+}
+.module-tab:hover { background: #dcdde3; }
+.module-tab.active { background: var(--primary); color: white; }
+.data-section-title { font-size: 20px; font-weight: 500; color: var(--primary); margin-bottom: 20px; }
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px; }
+.kpi-card { background: var(--surface); border-radius: 16px; box-shadow: var(--shadow-card); overflow: hidden; }
+.kpi-card .kpi-header { padding: 16px 16px 12px; display: flex; align-items: flex-start; justify-content: space-between; min-height: 70px; }
+.kpi-card .kpi-header .kpi-title { font-size: 16px; font-weight: 500; color: var(--primary); line-height: 25.6px; }
+.kpi-card .kpi-header .kpi-header-icon { opacity: 0.4; display: flex; align-items: center; flex-shrink: 0; margin-left: 8px; }
+.kpi-card .kpi-body { padding: 0 16px 8px; }
+.kpi-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+.kpi-row:last-child { border-bottom: none; }
+.kpi-row .kpi-label { font-size: 12px; font-weight: 500; color: rgba(0,0,0,0.87); }
+.kpi-row .kpi-value { font-size: 14px; font-weight: 500; color: rgba(0,0,0,0.87); }
+.charts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
+.chart-card { background: var(--surface); border-radius: 16px; box-shadow: var(--shadow-card); overflow: hidden; }
+.chart-card .chart-header { padding: 16px 16px 8px; display: flex; flex-direction: column; gap: 2px; }
+.chart-card .chart-header .chart-title { font-size: 16px; font-weight: 500; color: var(--primary); line-height: 1.4; }
+.chart-card .chart-header .chart-subtitle { font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; color: #8a8fa3; font-weight: 500; }
+.chart-card .chart-body { padding: 0 16px 16px; }
+.chart-placeholder { width: 100%; height: 220px; display: flex; align-items: center; justify-content: center; }
+.chart-legend { display: grid; grid-template-columns: repeat(3,1fr); gap: 4px 8px; padding-top: 12px; margin-top: 8px; border-top: 1px solid #f0f0f0; }
+.chart-legend-item { display: flex; align-items: center; gap: 6px; font-size: 10px; color: #666; line-height: 1.3; }
+.chart-legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.chart-legend-item .lbl { font-weight: 500; color: #151F47; }
+.chart-placeholder canvas { max-width: 100%; max-height: 100%; }
+/* Services */
+.services-section { margin-top: 36px; }
+.services-section > h1 { font-size: 32px; font-weight: 500; color: var(--text-primary); margin-bottom: 28px; }
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.whatsapp-fab { position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px; border-radius: 50%; background: var(--secondary); color: white; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 4px 12px rgba(37,211,102,0.4); z-index: 100; transition: transform 0.2s; border: none; cursor: pointer; }
+.whatsapp-fab:hover { transform: scale(1.1); }
+@media (max-width: 1200px) {
+  .kpi-grid { grid-template-columns: repeat(2,1fr); }
+  .charts-grid { grid-template-columns: repeat(2,1fr); }
+  .services-grid { grid-template-columns: repeat(2,1fr); }
+  .fc-scene { height: 460px; }
+}
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .kpi-grid, .charts-grid, .services-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== variant-a.css ===== */
+.variant-a .kpi-grid { grid-template-columns: repeat(4,1fr); gap: 12px; }
+.variant-a .kpi-card { padding: 18px 20px; overflow: visible; display: flex; flex-direction: column; }
+.variant-a .kpi-card .kpi-header { padding: 0; min-height: auto; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-start; }
+.variant-a .kpi-card .kpi-title { font-size: 11px !important; text-transform: uppercase; letter-spacing: 1.5px; color: #8a8fa3 !important; font-weight: 600 !important; line-height: 1.3 !important; }
+.variant-a .kpi-card .kpi-header-icon { width: 32px; height: 32px; background: rgba(21,31,71,0.06); border-radius: 8px; display: flex; align-items: center; justify-content: center; opacity: 1; flex-shrink: 0; }
+.variant-a .kpi-card .kpi-hero { font-size: 36px; font-weight: 500; color: var(--primary); line-height: 1; letter-spacing: -1px; margin-bottom: 4px; }
+.variant-a .kpi-card .kpi-hero-label { font-size: 12px; color: #8a8fa3; margin-bottom: 10px; }
+.variant-a .kpi-card .kpi-trend { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #067a57; padding: 3px 8px; background: #f2f8f6; border-radius: 12px; margin-bottom: 10px; align-self: flex-start; }
+.variant-a .kpi-card .kpi-trend.negative { color: #c62828; background: #fdecea; }
+.variant-a .kpi-card .kpi-body { padding: 10px 0 0; border-top: 1px solid #f0f0f0; margin-top: auto; }
+.variant-a .kpi-row { padding: 3px 0; border-bottom: none; }
+.variant-a .kpi-row .kpi-label { font-size: 11px; color: #8a8fa3; }
+.variant-a .kpi-row .kpi-value { font-size: 12px; font-weight: 500; color: var(--primary); }
+.variant-a .charts-grid { gap: 12px; }
+.variant-a .chart-card { padding: 4px; }
+.variant-a .chart-card .chart-header { padding: 20px 20px 8px; }
+.variant-a .chart-card .chart-title { font-size: 11px !important; text-transform: uppercase; letter-spacing: 1.5px; color: #8a8fa3 !important; font-weight: 600 !important; }
+.variant-a .chart-card .chart-body { padding: 0 20px 20px; }
+
+/* ─── CardFeatured v2 — Flip Card Design (referencia Estudio Actuarial) ─── */
+.fc-scene { perspective: 1800px; height: 430px; }
+.fc-card {
+  width: 100%; height: 100%; position: relative;
+  transform-style: preserve-3d;
+  transition: transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.fc-card.flipped { transform: rotateY(180deg); }
+.fc-face {
+  position: absolute; inset: 0; border-radius: 16px;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  border: 1px solid rgba(0,17,102,0.1);
+  box-shadow: 0 8px 8px -4px rgba(0,0,0,0.04), 0 20px 24px -4px rgba(0,0,0,0.08);
+}
+/* FRONT */
+.fc-front { background: #fff; display: flex; flex-direction: column; }
+.fc-front-inner {
+  opacity: 1; transition: opacity 350ms ease; transition-delay: 350ms;
+  display: flex; flex-direction: column; height: 100%;
+}
+.fc-card.flipped .fc-front-inner { opacity: 0; transition-delay: 0ms; }
+.fc-header {
+  height: 128px;
+  background: linear-gradient(180deg, #151f47 0%, #0c1230 100%);
+  position: relative; flex-shrink: 0; overflow: hidden;
+  border-bottom: 1px solid rgba(0,17,102,0.1);
+}
+.fc-formulas {
+  position: absolute; left: 18px; top: 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10px; line-height: 17px; color: rgba(255,255,255,0.3);
+}
+.fc-status-pill {
+  position: absolute; top: 12px; right: 12px;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 48px; font-size: 11px; font-weight: 600; color: #fff;
+  font-family: var(--font-family);
+}
+.fc-status-dot { width: 6px; height: 6px; border-radius: 9999px; background: #10B981; }
+.fc-header-chart {
+  position: absolute; left: 0; right: 0; top: 36px; bottom: 0;
+  overflow: hidden; pointer-events: none;
+}
+.fc-header-chart > svg {
+  position: absolute; bottom: 0; right: 14px;
+}
+.fc-body { flex: 1; padding: 14px 18px; display: flex; flex-direction: column; overflow: hidden; }
+.fc-icon-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.fc-icon-pill {
+  width: 36px; height: 36px; border-radius: 36px;
+  background: rgba(21,31,71,0.05); border: 1px solid rgba(21,31,71,0.2);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; color: #151f47;
+}
+.fc-eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 1.8px;
+  text-transform: uppercase; color: rgba(0,9,51,0.65);
+}
+.fc-title {
+  font-size: 16px; font-weight: 700; color: rgba(0,6,38,0.9);
+  margin: 0 0 6px; line-height: 1.3; letter-spacing: -0.2px;
+}
+.fc-desc { font-size: 12px; color: rgba(0,9,51,0.65); line-height: 1.5; flex: 1; }
+.fc-badges { display: flex; gap: 5px; flex-wrap: wrap; margin: 8px 0 0; }
+.fc-badge {
+  font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 9999px;
+  background: rgba(21,31,71,0.06); border: 1px solid rgba(21,31,71,0.5);
+  color: rgba(21,31,71,0.75); letter-spacing: 0.2px;
+}
+.fc-actions { display: flex; flex-direction: column; gap: 7px; margin-top: auto; padding-top: 10px; }
+.fc-btn-primary {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  height: 38px; border-radius: 8px; background: #212d7a;
+  color: #fff; font-family: var(--font-family); font-size: 13px; font-weight: 600;
+  text-decoration: none; border: none; cursor: pointer; transition: background 150ms ease; width: 100%;
+}
+.fc-btn-primary:hover { background: #4c64d9; }
+.fc-btn-secondary {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  height: 38px; border-radius: 8px; background: transparent;
+  color: #4c64d9; font-family: var(--font-family); font-size: 13px; font-weight: 600;
+  border: 1.5px solid #4c64d9; cursor: pointer; transition: background 150ms ease; width: 100%;
+}
+.fc-btn-secondary:hover { background: rgba(76,100,217,0.08); }
+/* BACK */
+.fc-back {
+  background: #0c1230; transform: rotateY(180deg);
+  display: flex; flex-direction: column;
+  border-color: rgba(255,255,255,0.08) !important;
+}
+.fc-card.flipped .fc-back {
+  border-color: rgba(232,100,44,0.5) !important;
+  box-shadow: 0 0 0 1px rgba(232,100,44,0.2), 0 20px 40px -8px rgba(232,100,44,0.25) !important;
+}
+.fc-back-inner {
+  opacity: 0; transition: opacity 350ms ease; transition-delay: 0ms;
+  display: flex; flex-direction: column; height: 100%;
+}
+.fc-card.flipped .fc-back-inner { opacity: 1; transition-delay: 350ms; }
+.fc-back-header {
+  padding: 12px 16px; flex-shrink: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.fc-back-header-left { display: flex; align-items: center; gap: 10px; }
+.fc-back-icon {
+  width: 32px; height: 32px; border-radius: 7px;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.fc-back-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: rgba(255,255,255,0.55); display: block; margin-bottom: 1px;
+}
+.fc-back-title { font-size: 13px; font-weight: 600; color: #fff; }
+.fc-back-volver {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 11px; border-radius: 48px;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+  color: #fff; font-family: var(--font-family); font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: background 150ms ease; flex-shrink: 0;
+}
+.fc-back-volver:hover { background: rgba(255,255,255,0.14); }
+.fc-video {
+  flex: 1; background: #000;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.fc-video-grid {
+  position: absolute; inset: 0; opacity: 0.35;
+  background-image:
+    linear-gradient(rgba(96,120,236,0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(96,120,236,0.5) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.fc-video-radial {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(76,100,217,0.25) 0%, rgba(0,0,0,0) 70%);
+}
+.fc-play-btn {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: rgba(255,255,255,0.95); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 2;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4); transition: transform 150ms ease;
+}
+.fc-play-btn:hover { transform: scale(1.06); }
+.fc-video-duration {
+  position: absolute; bottom: 10px; right: 12px; z-index: 2;
+  padding: 3px 8px; border-radius: 4px;
+  background: rgba(0,0,0,0.65); border: 1px solid rgba(255,255,255,0.12);
+  font-size: 11px; font-weight: 600; color: #fff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.fc-checklist { padding: 12px 16px 10px; flex-shrink: 0; }
+.fc-checklist-title {
+  font-size: 9px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 8px;
+}
+.fc-checklist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; }
+.fc-check-item {
+  display: flex; align-items: flex-start; gap: 6px;
+  font-size: 12px; color: rgba(255,255,255,0.8); line-height: 1.35;
+}
+.fc-check-item svg { flex-shrink: 0; margin-top: 2px; }
+  </style>
+</head>
+<body class="variant-a">
+  <div class="app-layout">
+    <div id="sidebar"></div>
+    <div class="main-area">
+      <div id="top-header"></div>
+      <div class="content-area">
+        <div class="content-inner">
+
+          <!-- Greeting -->
+          <div class="greeting-section">
+            <h1>Hola, Rodrigo</h1>
+            <p class="last-connection">Última conexión fue a las 3:34pm</p>
+          </div>
+
+          <!-- Module Tabs -->
+          <div id="module-tabs"></div>
+
+          <!-- Data Section -->
+          <h4 class="data-section-title">Datos correspondientes al 31 de diciembre del 2024</h4>
+
+          <!-- KPI Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-title">Provisión acumulada</span>
+                <span class="kpi-header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#151F47" stroke-width="1.8" stroke-linecap="round" width="18" height="18"><path d="M19 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/><path d="M3 10h18"/></svg></span>
+              </div>
+              <div class="kpi-hero">$9.34M</div>
+              <div class="kpi-hero-label">USD · Total acumulado</div>
+              <div class="kpi-trend">↑ +4.2% vs 2023</div>
+              <div class="kpi-body">
+                <div class="kpi-row"><span class="kpi-label">Jubilación Patronal</span><span class="kpi-value">$6.98M</span></div>
+                <div class="kpi-row"><span class="kpi-label">Desahucio</span><span class="kpi-value">$2.35M</span></div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-title">Remuneración promedio</span>
+                <span class="kpi-header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#151F47" stroke-width="1.8" width="18" height="18"><circle cx="12" cy="12" r="9"/><path d="M14.5 9h-3a1.5 1.5 0 0 0 0 3h2a1.5 1.5 0 0 1 0 3h-3.5" stroke-linecap="round"/></svg></span>
+              </div>
+              <div class="kpi-hero">$855<span style="font-size:24px">.85</span></div>
+              <div class="kpi-hero-label">USD · Promedio total</div>
+              <div class="kpi-trend">↑ +2.1% vs 2023</div>
+              <div class="kpi-body">
+                <div class="kpi-row"><span class="kpi-label">Hombres</span><span class="kpi-value">$851.95</span></div>
+                <div class="kpi-row"><span class="kpi-label">Mujeres</span><span class="kpi-value">$885.69</span></div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-title">Distribución demográfica</span>
+                <span class="kpi-header-icon"><svg viewBox="0 0 28 24" fill="none" stroke="#151F47" stroke-width="1.8" stroke-linecap="round" width="22" height="18"><circle cx="7" cy="9" r="4"/><path d="M7 13v6M4 16h6"/><circle cx="19" cy="10" r="4"/><path d="M19 6.5l3-3M22 3.5H19M22 3.5v3"/></svg></span>
+              </div>
+              <div class="kpi-hero">1,297</div>
+              <div class="kpi-hero-label">Total colaboradores</div>
+              <div class="kpi-trend">↑ +3.6% vs 2023</div>
+              <div class="kpi-body">
+                <div class="kpi-row"><span class="kpi-label">Hombres</span><span class="kpi-value">1,145 · 88%</span></div>
+                <div class="kpi-row"><span class="kpi-label">Mujeres</span><span class="kpi-value">152 · 12%</span></div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-title">Colaboradores jubilados</span>
+                <span class="kpi-header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#151F47" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="12" cy="8" r="6"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg></span>
+              </div>
+              <div class="kpi-hero">8</div>
+              <div class="kpi-hero-label">Total jubilados</div>
+              <div class="kpi-trend">↑ +2 vs 2023</div>
+              <div class="kpi-body">
+                <div class="kpi-row"><span class="kpi-label">Hombres</span><span class="kpi-value">7 · 88%</span></div>
+                <div class="kpi-row"><span class="kpi-label">Mujeres</span><span class="kpi-value">1 · 12%</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts -->
+          <div class="charts-grid">
+            <div class="chart-card">
+              <div class="chart-header"><span class="chart-title">Provisión jubilación patronal</span><span class="chart-subtitle">EN USD · POR TIEMPO DE SERVICIO</span></div>
+              <div class="chart-body">
+                <div class="chart-placeholder"><canvas id="chart-jubilacion"></canvas></div>
+                <div class="chart-legend" id="legend-jubilacion"></div>
+              </div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-header"><span class="chart-title">Número de colaboradores</span><span class="chart-subtitle">PERSONAS · POR TIEMPO DE SERVICIO</span></div>
+              <div class="chart-body">
+                <div class="chart-placeholder"><canvas id="chart-colaboradores"></canvas></div>
+                <div class="chart-legend" id="legend-colaboradores"></div>
+              </div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-header"><span class="chart-title">Provisión bonificación desahucio</span><span class="chart-subtitle">EN USD · POR TIEMPO DE SERVICIO</span></div>
+              <div class="chart-body">
+                <div class="chart-placeholder"><canvas id="chart-desahucio"></canvas></div>
+                <div class="chart-legend" id="legend-desahucio"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Services Section — CardFeatured con flip 3D -->
+          <div class="services-section">
+            <h1>Mis Servicios</h1>
+            <div class="services-grid" id="services-grid">
+            </div>
+          </div>
+
+          <div style="height:40px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="whatsapp-fab"></div>
+
+  <script>
+/* ===== app.js inlined ===== */
+function flipCard(id) {
+  document.getElementById(id).classList.toggle('flipped');
+}
+
+// ── CardFeatured: per-service data & builder ──────────────────────────────
+const ICON_FLIP = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>`;
+const CHECK_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6078ec" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+const SERVICES_DATA = [
+  {
+    id: 'fc-1',
+    eyebrow: 'ESTUDIOS ACTUARIALES',
+    title: 'Estudio actuarial',
+    desc: 'Cálculo de PBO/PBD bajo NIIF e IAS 19. Supuestos demográficos, financieros y de rotación calibrados con datos reales de tu empresa.',
+    badges: ['NIIF','IAS 19','ISO 27001'],
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>`,
+    formulas: ['μ = 0.0324','σ² = 0.0128','PBO = $9.34M'],
+    pts: [[0,15],[40,28],[80,38],[120,52],[160,65],[200,78],[240,88]],
+    backTitle: 'Estudio actuarial',
+    checklist: ['Cálculo de PBO/PBD','Supuestos actuariales','Informe bajo IAS 19','Entregables auditables'],
+    duration: '04:32',
+  },
+  {
+    id: 'fc-2',
+    eyebrow: 'TRIBUTARIO',
+    title: 'Impuestos diferidos',
+    desc: 'Determinación de activos y pasivos por impuesto diferido originados en provisiones laborales. Cumplimiento NIC 12.',
+    badges: ['NIC 12','LORTI','SRI'],
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9h-3a1.5 1.5 0 0 0 0 3h2a1.5 1.5 0 0 1 0 3h-3.5" stroke-linecap="round"/><path d="M12 6v2m0 8v2"/></svg>`,
+    formulas: ['TD = 25%','ΔAD = $0.28M','NAD = $1.12M'],
+    illus: `<svg width="240" height="100" viewBox="0 0 240 100" fill="none"><line x1="15" y1="88" x2="225" y2="88" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/><rect x="20" y="56" width="13" height="32" rx="2" fill="rgba(96,120,236,0.65)"/><rect x="35" y="70" width="13" height="18" rx="2" fill="rgba(96,120,236,0.3)"/><rect x="62" y="46" width="13" height="42" rx="2" fill="rgba(96,120,236,0.65)"/><rect x="77" y="63" width="13" height="25" rx="2" fill="rgba(96,120,236,0.3)"/><rect x="104" y="38" width="13" height="50" rx="2" fill="rgba(96,120,236,0.65)"/><rect x="119" y="56" width="13" height="32" rx="2" fill="rgba(96,120,236,0.3)"/><rect x="146" y="43" width="13" height="45" rx="2" fill="rgba(96,120,236,0.65)"/><rect x="161" y="61" width="13" height="27" rx="2" fill="rgba(96,120,236,0.3)"/><rect x="188" y="34" width="13" height="54" rx="2" fill="rgba(96,120,236,0.65)"/><rect x="203" y="53" width="13" height="35" rx="2" fill="rgba(96,120,236,0.3)"/><circle cx="26" cy="56" r="2" fill="#fff" opacity="0.7"/><circle cx="68" cy="46" r="2" fill="#fff" opacity="0.7"/><circle cx="110" cy="38" r="2" fill="#fff" opacity="0.7"/><circle cx="152" cy="43" r="2" fill="#fff" opacity="0.7"/><circle cx="194" cy="34" r="2" fill="#fff" opacity="0.7"/></svg>`,
+    backTitle: 'Impuestos diferidos',
+    checklist: ['Activo impuesto diferido','Pasivo impuesto diferido','Reconciliación NIC 12','Conciliación tributaria'],
+    duration: '03:45',
+  },
+  {
+    id: 'fc-3',
+    eyebrow: 'BENEFICIOS LABORALES',
+    title: 'Jubilación patronal',
+    desc: 'Cálculo actuarial de la obligación por jubilación patronal según el Código del Trabajo ecuatoriano.',
+    badges: ['Cód. Trabajo','IESS','IAS 19'],
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>`,
+    formulas: ['n = 25 años','r = 3.5%','PA = $4.2M'],
+    illus: `<svg width="240" height="100" viewBox="0 0 240 100" fill="none"><polygon points="10,28 70,18 130,12 190,8 240,6 240,22 190,28 130,34 70,40 10,50" fill="rgba(96,120,236,0.12)" stroke="rgba(96,120,236,0.3)" stroke-width="1.2" stroke-linejoin="round"/><polygon points="0,50 60,38 120,30 180,24 240,20 240,50 180,56 120,62 60,68 0,78" fill="rgba(96,120,236,0.2)" stroke="rgba(96,120,236,0.5)" stroke-width="1.5" stroke-linejoin="round"/><polygon points="0,70 60,56 120,48 180,42 240,38 240,92 180,92 120,92 60,92 0,92" fill="rgba(96,120,236,0.3)" stroke="rgba(96,120,236,0.0)" stroke-width="0"/><polyline points="0,70 60,56 120,48 180,42 240,38" stroke="#6078ec" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0" cy="70" r="2.5" fill="#fff" stroke="#6078ec" stroke-width="1.5"/><circle cx="60" cy="56" r="2.5" fill="#fff" stroke="#6078ec" stroke-width="1.5"/><circle cx="120" cy="48" r="2.5" fill="#fff" stroke="#6078ec" stroke-width="1.5"/><circle cx="180" cy="42" r="2.5" fill="#fff" stroke="#6078ec" stroke-width="1.5"/><circle cx="240" cy="38" r="2.5" fill="#fff" stroke="#6078ec" stroke-width="1.5"/></svg>`,
+    backTitle: 'Jubilación patronal',
+    checklist: ['Proyección beneficios','Tasa de descuento','Tabla de mortalidad','Actas individuales'],
+    duration: '05:10',
+  },
+  {
+    id: 'fc-4',
+    eyebrow: 'CUMPLIMIENTO NORMATIVO',
+    title: 'Control tributario',
+    desc: 'Monitoreo y control de obligaciones tributarias. Revisión de provisiones, conciliaciones y cumplimiento SRI.',
+    badges: ['SRI','LORTI','NIC 12'],
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>`,
+    formulas: ['c = 100%','Δprov = +4.2%','base = $9.34M'],
+    illus: `<svg width="240" height="100" viewBox="0 0 240 100" fill="none"><circle cx="45" cy="50" r="30" stroke="rgba(255,255,255,0.08)" stroke-width="9" fill="none"/><circle cx="45" cy="50" r="30" stroke="#6078ec" stroke-width="9" fill="none" stroke-dasharray="179 9" stroke-linecap="round" transform="rotate(-90 45 50)"/><circle cx="120" cy="50" r="30" stroke="rgba(255,255,255,0.08)" stroke-width="9" fill="none"/><circle cx="120" cy="50" r="30" stroke="rgba(96,120,236,0.75)" stroke-width="9" fill="none" stroke-dasharray="141 48" stroke-linecap="round" transform="rotate(-90 120 50)"/><circle cx="195" cy="50" r="30" stroke="rgba(255,255,255,0.08)" stroke-width="9" fill="none"/><circle cx="195" cy="50" r="30" stroke="rgba(96,120,236,0.5)" stroke-width="9" fill="none" stroke-dasharray="188 1" stroke-linecap="round" transform="rotate(-90 195 50)"/><circle cx="45" cy="20" r="3" fill="#6078ec"/><circle cx="120" cy="20" r="3" fill="rgba(96,120,236,0.8)"/><circle cx="195" cy="20" r="3" fill="rgba(96,120,236,0.6)"/></svg>`,
+    backTitle: 'Control tributario',
+    checklist: ['Revisión de provisiones','Conciliación tributaria','Calendario obligaciones','Alertas vencimiento'],
+    duration: '03:20',
+  },
+  {
+    id: 'fc-5',
+    eyebrow: 'ANÁLISIS PREDICTIVO',
+    title: 'Simulador de beneficios',
+    desc: 'Proyecta el impacto financiero de cambios en supuestos: tasas de descuento, incrementos salariales y rotación.',
+    badges: ['Monte Carlo','NIIF','ML'],
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
+    formulas: ['TSD = 6.8%','r_sal = 4.5%','Δprov = +8.2%'],
+    illus: `<svg width="240" height="100" viewBox="0 0 240 100" fill="none"><line x1="20" y1="88" x2="228" y2="88" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><line x1="20" y1="88" x2="20" y2="10" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><line x1="20" y1="68" x2="228" y2="68" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/><line x1="20" y1="48" x2="228" y2="48" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/><line x1="20" y1="28" x2="228" y2="28" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/><line x1="26" y1="82" x2="222" y2="18" stroke="rgba(96,120,236,0.35)" stroke-width="1.5" stroke-dasharray="4,3"/><circle cx="32" cy="78" r="3" fill="rgba(96,120,236,0.6)" stroke="#6078ec" stroke-width="1"/><circle cx="44" cy="71" r="2" fill="rgba(96,120,236,0.45)"/><circle cx="56" cy="68" r="3" fill="rgba(96,120,236,0.6)" stroke="#6078ec" stroke-width="1"/><circle cx="70" cy="63" r="2.5" fill="rgba(96,120,236,0.5)"/><circle cx="82" cy="59" r="3" fill="rgba(96,120,236,0.6)" stroke="#6078ec" stroke-width="1"/><circle cx="96" cy="54" r="2" fill="rgba(96,120,236,0.4)"/><circle cx="108" cy="51" r="3" fill="rgba(96,120,236,0.6)" stroke="#6078ec" stroke-width="1"/><circle cx="118" cy="56" r="2" fill="rgba(96,120,236,0.4)"/><circle cx="130" cy="46" r="3.5" fill="#6078ec" stroke="#fff" stroke-width="1.2"/><circle cx="142" cy="43" r="2" fill="rgba(96,120,236,0.4)"/><circle cx="154" cy="38" r="3" fill="rgba(96,120,236,0.6)" stroke="#6078ec" stroke-width="1"/><circle cx="166" cy="34" r="2.5" fill="rgba(96,120,236,0.5)"/><circle cx="178" cy="30" r="3" fill="rgba(96,120,236,0.6)" stroke="#6078ec" stroke-width="1"/><circle cx="192" cy="26" r="2" fill="rgba(96,120,236,0.4)"/><circle cx="204" cy="22" r="3" fill="rgba(96,120,236,0.6)" stroke="#6078ec" stroke-width="1"/><circle cx="216" cy="18" r="3.5" fill="#6078ec" stroke="#fff" stroke-width="1.2"/></svg>`,
+    backTitle: 'Simulador de beneficios',
+    checklist: ['Escenarios what-if','Sensibilidad tasas','Proyección 10 años','Exportar a Excel'],
+    duration: '06:15',
+  },
+  {
+    id: 'fc-6',
+    eyebrow: 'INTELIGENCIA ARTIFICIAL',
+    title: 'NavIA Actuarial',
+    titleSup: 'Beta',
+    desc: 'Asistente actuarial con IA. Consulta normativa, interpreta resultados y genera borradores de informes al instante.',
+    badges: ['GPT-4o','RAG','ISO 27001'],
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/><circle cx="17" cy="15" r="2" fill="currentColor" stroke="none"/></svg>`,
+    formulas: ['q = 24/7','n_ctx = 150k','τ = 0.15s'],
+    illus: `<svg width="240" height="100" viewBox="0 0 240 100" fill="none"><line x1="30" y1="50" x2="80" y2="24" stroke="rgba(96,120,236,0.4)" stroke-width="1"/><line x1="30" y1="50" x2="80" y2="76" stroke="rgba(96,120,236,0.4)" stroke-width="1"/><line x1="80" y1="24" x2="148" y2="14" stroke="rgba(96,120,236,0.4)" stroke-width="1"/><line x1="80" y1="24" x2="148" y2="50" stroke="rgba(96,120,236,0.4)" stroke-width="1"/><line x1="80" y1="76" x2="148" y2="50" stroke="rgba(96,120,236,0.4)" stroke-width="1"/><line x1="80" y1="76" x2="148" y2="86" stroke="rgba(96,120,236,0.4)" stroke-width="1"/><line x1="148" y1="14" x2="212" y2="24" stroke="rgba(96,120,236,0.4)" stroke-width="1"/><line x1="148" y1="50" x2="212" y2="24" stroke="rgba(96,120,236,0.4)" stroke-width="1"/><line x1="148" y1="50" x2="212" y2="66" stroke="rgba(96,120,236,0.4)" stroke-width="1"/><line x1="148" y1="86" x2="212" y2="66" stroke="rgba(96,120,236,0.4)" stroke-width="1"/><line x1="80" y1="24" x2="80" y2="76" stroke="rgba(96,120,236,0.18)" stroke-width="0.8"/><line x1="148" y1="14" x2="148" y2="86" stroke="rgba(96,120,236,0.18)" stroke-width="0.8"/><circle cx="30" cy="50" r="8" fill="rgba(96,120,236,0.2)" stroke="#6078ec" stroke-width="1.5"/><circle cx="30" cy="50" r="3.5" fill="#6078ec"/><circle cx="30" cy="50" r="12" fill="none" stroke="rgba(96,120,236,0.12)" stroke-width="1.5"/><circle cx="80" cy="24" r="5.5" fill="rgba(96,120,236,0.2)" stroke="#6078ec" stroke-width="1.5"/><circle cx="80" cy="76" r="5.5" fill="rgba(96,120,236,0.2)" stroke="#6078ec" stroke-width="1.5"/><circle cx="148" cy="50" r="7" fill="rgba(96,120,236,0.25)" stroke="#6078ec" stroke-width="1.8"/><circle cx="148" cy="50" r="3" fill="#6078ec"/><circle cx="148" cy="14" r="4" fill="rgba(96,120,236,0.2)" stroke="rgba(96,120,236,0.8)" stroke-width="1.5"/><circle cx="148" cy="86" r="4" fill="rgba(96,120,236,0.2)" stroke="rgba(96,120,236,0.8)" stroke-width="1.5"/><circle cx="212" cy="24" r="5.5" fill="rgba(96,120,236,0.2)" stroke="#6078ec" stroke-width="1.5"/><circle cx="212" cy="66" r="4.5" fill="rgba(96,120,236,0.15)" stroke="rgba(96,120,236,0.7)" stroke-width="1.5"/></svg>`,
+    backTitle: 'NavIA Actuarial',
+    checklist: ['Consultas normativas','Resumen de informes','Borradores de texto','Disponible 24/7'],
+    duration: '02:45',
+  },
+];
+
+function buildChartSVG(pts, id) {
+  const W = 240, H = 100;
+  const xs = pts.map(p => p[0]);
+  const ys = pts.map(p => p[1]);
+  const minY = Math.min(...ys), maxY = Math.max(...ys);
+  const scaleY = y => H - 4 - ((y - minY) / (maxY - minY + 0.001)) * (H - 8);
+  const polyPts = pts.map(p => `${p[0]},${scaleY(p[1])}`).join(' ');
+  const fillPts = `${pts[0][0]},${H} ${polyPts} ${pts[pts.length-1][0]},${H}`;
+  const dots = pts.map(p => `<circle cx="${p[0]}" cy="${scaleY(p[1])}" r="2.5" fill="#fff" stroke="#6078ec" stroke-width="1.5"/>`).join('');
+  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <pattern id="grid-${id}" width="32" height="32" patternUnits="userSpaceOnUse">
+        <path d="M32 0 H0 V32" fill="none" stroke="#fff" stroke-width="0.5"/>
+      </pattern>
+    </defs>
+    <polygon points="${fillPts}" fill="rgba(96,120,236,0.18)"/>
+    <polyline points="${polyPts}" stroke="#6078ec" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    ${dots}
+  </svg>`;
+}
+
+function buildServiceCard(s) {
+  const chartSvg = s.illus || buildChartSVG(s.pts, s.id);
+  const formulasHtml = s.formulas.map(f => `<div>${f}</div>`).join('');
+  const badgesHtml = s.badges.map(b => `<span class="fc-badge">${b}</span>`).join('');
+  const checkHtml = s.checklist.map(c => `<div class="fc-check-item">${CHECK_SVG}<span>${c}</span></div>`).join('');
+  const titleHtml = s.titleSup
+    ? `${s.title}<sup style="font-size:10px;vertical-align:super;margin-left:3px;color:#4c64d9;">${s.titleSup}</sup>`
+    : s.title;
+  return `<div class="fc-scene">
+    <div class="fc-card" id="${s.id}">
+      <!-- FRONT -->
+      <div class="fc-face fc-front">
+        <div class="fc-front-inner">
+          <div class="fc-header">
+            <div class="fc-formulas">${formulasHtml}</div>
+            <div class="fc-status-pill"><span class="fc-status-dot"></span>Activo</div>
+            <div class="fc-header-chart">${chartSvg}</div>
+          </div>
+          <div class="fc-body">
+            <div class="fc-icon-row">
+              <div class="fc-icon-pill">${s.icon}</div>
+              <div class="fc-eyebrow">${s.eyebrow}</div>
+            </div>
+            <div class="fc-title">${titleHtml}</div>
+            <div class="fc-desc">${s.desc}</div>
+            <div class="fc-badges">${badgesHtml}</div>
+            <div class="fc-actions">
+              <a href="#" class="fc-btn-primary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                Ingresar
+              </a>
+              <button class="fc-btn-secondary" onclick="flipCard('${s.id}')">
+                ${ICON_FLIP} Tutorial
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- BACK -->
+      <div class="fc-face fc-back">
+        <div class="fc-back-inner">
+          <div class="fc-back-header">
+            <div class="fc-back-header-left">
+              <div class="fc-back-icon">${s.icon.replace(/stroke="currentColor"/g, 'stroke="rgba(255,255,255,0.85)"')}</div>
+              <div>
+                <span class="fc-back-label">TUTORIAL</span>
+                <div class="fc-back-title">${s.backTitle}</div>
+              </div>
+            </div>
+            <button class="fc-back-volver" onclick="flipCard('${s.id}')">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              Volver
+            </button>
+          </div>
+          <div class="fc-video">
+            <div class="fc-video-grid"></div>
+            <div class="fc-video-radial"></div>
+            <button class="fc-play-btn">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#151f47"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+            <div class="fc-video-duration">${s.duration}</div>
+          </div>
+          <div class="fc-checklist">
+            <div class="fc-checklist-title">LO QUE APRENDERÁS</div>
+            <div class="fc-checklist-grid">${checkHtml}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildServicesGrid() {
+  const grid = document.getElementById('services-grid');
+  if (grid) grid.innerHTML = SERVICES_DATA.map(buildServiceCard).join('');
+}
+
+const ICONS = {
+  home: `<svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>`,
+  person: `<svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`,
+  store: `<svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"/></svg>`,
+  settings: `<svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>`,
+  chevronDown: `<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>`,
+  search: `<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>`,
+  notifications: `<svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg>`,
+  menu: `<svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>`,
+  whatsapp: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.75 13.96c.25.13.41.2.46.3.06.11.04.61-.21 1.18-.2.56-1.24 1.1-1.7 1.12-.46.02-.47.36-2.96-.73-2.49-1.09-3.99-3.75-4.11-3.92-.12-.17-.96-1.38-.92-2.61.05-1.22.69-1.8.95-2.04.24-.26.51-.29.68-.26h.47c.15 0 .36-.06.55.45l.69 1.87c.06.13.1.28.01.44l-.27.41-.39.42c-.12.12-.26.25-.12.5.12.26.62 1.09 1.32 1.78.91.88 1.71 1.17 1.95 1.3.24.14.39.12.54-.04l.81-.94c.19-.25.35-.19.58-.11l1.67.88M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10c-1.97 0-3.8-.57-5.35-1.55L2 22l1.55-4.65A9.969 9.969 0 0 1 2 12 10 10 0 0 1 12 2m0 2a8 8 0 0 0-8 8c0 1.72.54 3.31 1.46 4.61L4.5 19.5l2.89-.96A7.95 7.95 0 0 0 12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8z"/></svg>`,
+};
+
+function buildSidebar(activePage) {
+  const items = [
+    { icon: ICONS.home, label: 'Inicio', expandable: true, id: 'inicio', subItems: ['Panel General'] },
+    { icon: ICONS.person, label: 'Mi cuenta', expandable: true, id: 'cuenta', subItems: ['Perfil', 'Configuración'] },
+    { icon: ICONS.store, label: 'Servicios', expandable: true, id: 'servicios', subItems: ['Mis servicios'] },
+    { icon: ICONS.settings, label: 'Recursos', expandable: false, id: 'recursos' },
+  ];
+  return `<aside class="sidebar">
+    <div class="sidebar-header">
+      <a href="#" style="text-decoration:none;display:flex;align-items:center;">
+        <img src="https://earnest-hamster-c08c0c.netlify.app/assets/logos/compass_logo_blanco.svg" alt="Actuaria Plus" style="height:32px;">
+      </a>
+    </div>
+    <div class="sidebar-body">
+      <div class="sidebar-search">
+        <span class="search-icon">${ICONS.search}</span>
+        <input type="text" placeholder="Buscar...">
+      </div>
+      <nav class="sidebar-nav">
+        ${items.map((item, i) => `
+          <button class="nav-item ${i===0?'active expanded':''}" onclick="toggleNav(this)">
+            <span class="nav-icon">${item.icon}</span>
+            <span>${item.label}</span>
+            ${item.expandable ? `<span class="nav-arrow">${ICONS.chevronDown}</span>` : ''}
+          </button>
+          ${item.expandable && item.subItems ? `
+            <div class="nav-sub-items ${i===0?'open':''}">
+              ${item.subItems.map(s=>`<a class="nav-sub-item" href="#">${s}</a>`).join('')}
+            </div>` : ''}
+          ${i===0?'<div class="nav-section-label">Panel General</div>':''}
+        `).join('')}
+      </nav>
+      <div class="sidebar-footer">
+        <div class="footer-app-name">Actuaria Plus</div>
+        <div class="footer-email">soporteplus@actuaria.com</div>
+        <div class="footer-version">v 1.8.9</div>
+      </div>
+    </div>
+  </aside>`;
+}
+
+function buildTopHeader() {
+  return `<header class="top-header">
+    <div class="header-left"></div>
+    <div class="header-right">
+      <button class="header-notification">${ICONS.notifications}<span class="badge">1</span></button>
+      <button class="company-selector">
+        <div class="company-logo">
+          <svg viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)" width="18" height="18"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>
+        </div>
+        CALCULLIS S.A. ${ICONS.chevronDown}
+      </button>
+    </div>
+  </header>`;
+}
+
+function buildModuleTabs(activeTab) {
+  const tabs = [
+    { id: 'dashboard', label: 'Inicio' },
+    { id: 'estudio-actuarial', label: 'Estudio actuarial' },
+    { id: 'impuestos-diferidos', label: 'Impuestos diferidos' },
+    { id: 'actas-jubilacion', label: 'Actas de jubilación' },
+    { id: 'control-tributario', label: 'Control tributario' },
+    { id: 'simulador', label: 'Simulador de beneficios' },
+    { id: 'navia', label: 'NavIA <sup style="font-size:8px">Beta</sup>' },
+  ];
+  return `<div class="module-tabs">${tabs.map(t=>`<a href="#" class="module-tab ${t.id===activeTab?'active':''}">${t.label}</a>`).join('')}</div>`;
+}
+
+function buildWhatsAppFab() {
+  return `<a class="whatsapp-fab" href="#" title="Escríbenos a WhatsApp">${ICONS.whatsapp}</a>`;
+}
+
+function toggleNav(btn) {
+  btn.classList.toggle('expanded');
+  const sub = btn.nextElementSibling;
+  if (sub && sub.classList.contains('nav-sub-items')) sub.classList.toggle('open');
+}
+
+function initLayout(activePage, activeTab) {
+  const sidebarEl = document.getElementById('sidebar');
+  if (sidebarEl) sidebarEl.outerHTML = buildSidebar(activePage);
+  const headerEl = document.getElementById('top-header');
+  if (headerEl) headerEl.outerHTML = buildTopHeader();
+  const tabsEl = document.getElementById('module-tabs');
+  if (tabsEl) tabsEl.outerHTML = buildModuleTabs(activeTab || activePage);
+  const fabEl = document.getElementById('whatsapp-fab');
+  if (fabEl) fabEl.outerHTML = buildWhatsAppFab();
+}
+
+function initDashboardCharts() {
+  if (typeof Chart === 'undefined') return;
+  if (typeof ChartDataLabels !== 'undefined') Chart.register(ChartDataLabels);
+  const palette6 = ['#a3cde8','#5b9bd5','#2e6aad','#1a3a6e','#091636','#7c8fb3'];
+  const palette5 = ['#a3cde8','#5b9bd5','#2e6aad','#1a3a6e','#091636'];
+  const donutTooltip = {
+    callbacks: { label: (ctx) => { const v=ctx.parsed,t=ctx.dataset.data.reduce((a,b)=>a+b,0),p=(v/t*100).toFixed(1),f=v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); return ` $${f} (${p}%)`; } },
+    backgroundColor:'rgba(21,31,71,0.95)', titleFont:{family:'Nunito',size:12,weight:'600'},
+    bodyFont:{family:'Nunito',size:12}, padding:10, cornerRadius:6, displayColors:false
+  };
+  const labels5=['TS < 10','10 ≤ TS < 15','15 ≤ TS < 20','20 ≤ TS < 25','TS ≥ 25'];
+  const labels6=[...labels5,'Jubilados'];
+  function renderLegend(id,labels,colors) {
+    const el=document.getElementById(id);
+    if (el) el.innerHTML=labels.map((l,i)=>`<div class="chart-legend-item"><span class="chart-legend-dot" style="background:${colors[i]}"></span><span class="lbl">${l}</span></div>`).join('');
+  }
+  const ctx1=document.getElementById('chart-jubilacion');
+  if (ctx1) { new Chart(ctx1,{type:'doughnut',data:{labels:labels6,datasets:[{data:[700000,800000,900000,1500000,2800000,282224],backgroundColor:palette6,borderColor:'#fff',borderWidth:2,borderRadius:3,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false},datalabels:{display:false},tooltip:donutTooltip}}}); renderLegend('legend-jubilacion',labels6,palette6); }
+  const ctx2=document.getElementById('chart-colaboradores');
+  if (ctx2) { new Chart(ctx2,{type:'bar',data:{labels:labels6,datasets:[{data:[307,254,120,78,45,8],backgroundColor:palette6,borderRadius:{topLeft:6,topRight:6,bottomLeft:0,bottomRight:0},borderSkipped:false,maxBarThickness:28,categoryPercentage:0.7,barPercentage:0.85}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:8}},plugins:{legend:{display:false},datalabels:{display:false},tooltip:{backgroundColor:'rgba(21,31,71,0.95)',titleFont:{family:'Nunito',size:12,weight:'600'},bodyFont:{family:'Nunito',size:12},padding:10,cornerRadius:6,displayColors:false,callbacks:{label:(ctx)=>' '+ctx.parsed.y.toLocaleString()+' colaboradores'}}},scales:{y:{beginAtZero:true,grid:{display:false},border:{display:true,color:'#e0e0e0'},ticks:{font:{family:'Nunito',size:10},color:'#666'}},x:{grid:{display:false},border:{display:true,color:'#e0e0e0'},ticks:{display:false}}}}}); renderLegend('legend-colaboradores',labels6,palette6); }
+  const ctx3=document.getElementById('chart-desahucio');
+  if (ctx3) { new Chart(ctx3,{type:'doughnut',data:{labels:labels5,datasets:[{data:[302895,350000,400000,500000,800000],backgroundColor:palette5,borderColor:'#fff',borderWidth:2,borderRadius:3,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false},datalabels:{display:false},tooltip:donutTooltip}}}); renderLegend('legend-desahucio',labels5,palette5); }
+}
+
+initLayout('dashboard', 'dashboard');
+buildServicesGrid();
+initDashboardCharts();
+  </script>
+</body>
+</html>
