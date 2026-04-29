@@ -148,22 +148,22 @@ body {
   background: rgba(255,255,255,0.15);
   display: flex; align-items: center; justify-content: center; overflow: hidden;
 }
-.content-area { flex: 1; overflow-y: auto; padding: 0; padding-top: 64px; }
+.content-area { flex: 1; overflow-y: auto; padding: 0; padding-top: 64px; scroll-behavior: smooth; }
 .content-inner { padding: 24px; margin-top: 16px; }
 .greeting-section { margin-bottom: 12px; }
 .greeting-section h1 { font-size: 32px; font-weight: 500; color: var(--primary); line-height: 37px; }
 .greeting-section .last-connection { font-size: 14px; color: var(--primary); font-weight: 500; margin-top: 2px; }
 .module-tabs { display: flex; gap: 6px; margin-bottom: 24px; flex-wrap: wrap; }
 .module-tab {
-  padding: 0 12px; height: 32px; border: none;
-  background: #e9eaee;
+  padding: 0 12px; height: 32px;
+  background: #FFFFFF; border: 1px solid rgba(21,31,71,0.15);
   font-family: var(--font-family); font-size: 13px; font-weight: 500;
   color: #181E3A; cursor: pointer;
   border-radius: 16px; transition: all 0.2s;
   white-space: nowrap; text-decoration: none;
   display: inline-flex; align-items: center;
 }
-.module-tab:hover { background: #dcdde3; }
+.module-tab:hover { background: #f0f1f6; border-color: rgba(21,31,71,0.25); }
 .module-tab.active { background: var(--primary); color: white; }
 .data-section-title { font-size: 20px; font-weight: 500; color: var(--primary); margin-bottom: 20px; }
 .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px; }
@@ -176,7 +176,11 @@ body {
 .kpi-row:last-child { border-bottom: none; }
 .kpi-row .kpi-label { font-size: 12px; font-weight: 500; color: rgba(0,0,0,0.87); }
 .kpi-row .kpi-value { font-size: 14px; font-weight: 500; color: rgba(0,0,0,0.87); }
-.charts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
+.charts-grid { display: grid; grid-template-columns: minmax(120px, 140px) repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
+.legend-card { display: flex; flex-direction: column; }
+.legend-card .chart-body { flex: 1; display: flex; }
+#legend-shared { flex: 1; display: flex; flex-direction: column; justify-content: space-around; width: 100%; }
+#legend-shared .chart-legend-item { font-size: 11px; }
 .chart-card { background: var(--surface); border-radius: 16px; box-shadow: var(--shadow-card); overflow: hidden; }
 .chart-card .chart-header { padding: 16px 16px 8px; display: flex; flex-direction: column; gap: 2px; }
 .chart-card .chart-header .chart-title { font-size: 16px; font-weight: 500; color: var(--primary); line-height: 1.4; }
@@ -194,11 +198,20 @@ body {
 .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .whatsapp-fab { position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px; border-radius: 50%; background: var(--secondary); color: white; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 4px 12px rgba(37,211,102,0.4); z-index: 100; transition: transform 0.2s; border: none; cursor: pointer; }
 .whatsapp-fab:hover { transform: scale(1.1); }
+.section-header-row { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
+.section-header-row .data-section-title { margin-bottom: 0; }
+.scroll-to-services { display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--primary); opacity: 0.5; transition: opacity 0.2s; padding: 2px 4px; flex-shrink: 0; margin-top: -25px; }
+.scroll-to-services:hover { opacity: 1; }
+.scroll-cols { display: flex; flex-direction: row; gap: 3px; }
+.scroll-to-services .scroll-label { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; writing-mode: vertical-rl; text-orientation: mixed; line-height: 1; }
+.scroll-mouse { display: flex; }
+.mouse-wheel { animation: scroll-wheel 1.4s ease-in-out infinite; transform-box: fill-box; transform-origin: top center; }
+@keyframes scroll-wheel { 0% { transform: translateY(0); opacity: 1; } 55% { transform: translateY(6px); opacity: 0; } 56% { transform: translateY(0); opacity: 0; } 80% { transform: translateY(0); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
 @media (max-width: 1200px) {
   .kpi-grid { grid-template-columns: repeat(2,1fr); }
   .charts-grid { grid-template-columns: repeat(2,1fr); }
   .services-grid { grid-template-columns: repeat(2,1fr); }
-  .fc-scene { height: 460px; }
+  .fc-scene { height: 410px; }
 }
 @media (max-width: 768px) {
   .sidebar { display: none; }
@@ -226,7 +239,8 @@ body {
 .variant-a .chart-card .chart-body { padding: 0 20px 20px; }
 
 /* ─── CardFeatured v2 — Flip Card Design (referencia Estudio Actuarial) ─── */
-.fc-scene { perspective: 1800px; height: 430px; }
+.fc-scene { perspective: 1800px; height: 380px; position: relative; }
+.fc-glare { position: absolute; inset: 0; border-radius: 16px; pointer-events: none; z-index: 50; opacity: 0; transition: opacity 0.4s ease; }
 .fc-card {
   width: 100%; height: 100%; position: relative;
   transform-style: preserve-3d;
@@ -413,7 +427,16 @@ body {
           <div id="module-tabs"></div>
 
           <!-- Data Section -->
-          <h4 class="data-section-title">Datos correspondientes al 31 de diciembre del 2024</h4>
+          <div class="section-header-row">
+            <h4 class="data-section-title">Datos correspondientes al 31 de diciembre del 2024</h4>
+            <a href="#mis-servicios" class="scroll-to-services" title="Ver mis servicios">
+              <span class="scroll-cols">
+                <span class="scroll-label">Ver mis</span>
+                <span class="scroll-label">servicios</span>
+              </span>
+              <span class="scroll-mouse"><svg width="16" height="24" viewBox="0 0 16 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="14" height="22" rx="7" stroke="currentColor" stroke-width="1.5"/><rect class="mouse-wheel" x="6.5" y="5" width="3" height="5" rx="1.5" fill="currentColor"/></svg></span>
+            </a>
+          </div>
 
           <!-- KPI Cards -->
           <div class="kpi-grid">
@@ -473,31 +496,34 @@ body {
 
           <!-- Charts -->
           <div class="charts-grid">
+            <div class="chart-card legend-card">
+              <div class="chart-header"><span class="chart-subtitle">QUINQUENIO POR TIEMPO DE SERVICIO</span></div>
+              <div class="chart-body">
+                <div id="legend-shared"></div>
+              </div>
+            </div>
             <div class="chart-card">
               <div class="chart-header"><span class="chart-title">Provisión jubilación patronal</span><span class="chart-subtitle">EN USD · POR TIEMPO DE SERVICIO</span></div>
               <div class="chart-body">
                 <div class="chart-placeholder"><canvas id="chart-jubilacion"></canvas></div>
-                <div class="chart-legend" id="legend-jubilacion"></div>
               </div>
             </div>
             <div class="chart-card">
               <div class="chart-header"><span class="chart-title">Número de colaboradores</span><span class="chart-subtitle">PERSONAS · POR TIEMPO DE SERVICIO</span></div>
               <div class="chart-body">
                 <div class="chart-placeholder"><canvas id="chart-colaboradores"></canvas></div>
-                <div class="chart-legend" id="legend-colaboradores"></div>
               </div>
             </div>
             <div class="chart-card">
               <div class="chart-header"><span class="chart-title">Provisión bonificación desahucio</span><span class="chart-subtitle">EN USD · POR TIEMPO DE SERVICIO</span></div>
               <div class="chart-body">
                 <div class="chart-placeholder"><canvas id="chart-desahucio"></canvas></div>
-                <div class="chart-legend" id="legend-desahucio"></div>
               </div>
             </div>
           </div>
 
           <!-- Services Section — CardFeatured con flip 3D -->
-          <div class="services-section">
+          <div class="services-section" id="mis-servicios">
             <h1>Mis Servicios</h1>
             <div class="services-grid" id="services-grid">
             </div>
@@ -647,9 +673,8 @@ function buildServiceCard(s) {
               <div class="fc-icon-pill">${s.icon}</div>
               <div class="fc-eyebrow">${s.eyebrow}</div>
             </div>
-            <div class="fc-title">${titleHtml}</div>
+            <div class="fc-title"><span class="fc-title-txt">${titleHtml}</span></div>
             <div class="fc-desc">${s.desc}</div>
-            <div class="fc-badges">${badgesHtml}</div>
             <div class="fc-actions">
               <a href="#" class="fc-btn-primary">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
@@ -820,16 +845,73 @@ function initDashboardCharts() {
     if (el) el.innerHTML=labels.map((l,i)=>`<div class="chart-legend-item"><span class="chart-legend-dot" style="background:${colors[i]}"></span><span class="lbl">${l}</span></div>`).join('');
   }
   const ctx1=document.getElementById('chart-jubilacion');
-  if (ctx1) { new Chart(ctx1,{type:'doughnut',data:{labels:labels6,datasets:[{data:[700000,800000,900000,1500000,2800000,282224],backgroundColor:palette6,borderColor:'#fff',borderWidth:2,borderRadius:3,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false},datalabels:{display:false},tooltip:donutTooltip}}}); renderLegend('legend-jubilacion',labels6,palette6); }
+  if (ctx1) { new Chart(ctx1,{type:'doughnut',data:{labels:labels6,datasets:[{data:[700000,800000,900000,1500000,2800000,282224],backgroundColor:palette6,borderColor:'#fff',borderWidth:2,borderRadius:3,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false},datalabels:{display:false},tooltip:donutTooltip}}}); }
   const ctx2=document.getElementById('chart-colaboradores');
-  if (ctx2) { new Chart(ctx2,{type:'bar',data:{labels:labels6,datasets:[{data:[307,254,120,78,45,8],backgroundColor:palette6,borderRadius:{topLeft:6,topRight:6,bottomLeft:0,bottomRight:0},borderSkipped:false,maxBarThickness:28,categoryPercentage:0.7,barPercentage:0.85}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:8}},plugins:{legend:{display:false},datalabels:{display:false},tooltip:{backgroundColor:'rgba(21,31,71,0.95)',titleFont:{family:'Nunito',size:12,weight:'600'},bodyFont:{family:'Nunito',size:12},padding:10,cornerRadius:6,displayColors:false,callbacks:{label:(ctx)=>' '+ctx.parsed.y.toLocaleString()+' colaboradores'}}},scales:{y:{beginAtZero:true,grid:{display:false},border:{display:true,color:'#e0e0e0'},ticks:{font:{family:'Nunito',size:10},color:'#666'}},x:{grid:{display:false},border:{display:true,color:'#e0e0e0'},ticks:{display:false}}}}}); renderLegend('legend-colaboradores',labels6,palette6); }
+  if (ctx2) { new Chart(ctx2,{type:'bar',data:{labels:labels6,datasets:[{data:[307,254,120,78,45,8],backgroundColor:palette6,borderRadius:{topLeft:6,topRight:6,bottomLeft:0,bottomRight:0},borderSkipped:false,maxBarThickness:28,categoryPercentage:0.7,barPercentage:0.85}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:8}},plugins:{legend:{display:false},datalabels:{display:false},tooltip:{backgroundColor:'rgba(21,31,71,0.95)',titleFont:{family:'Nunito',size:12,weight:'600'},bodyFont:{family:'Nunito',size:12},padding:10,cornerRadius:6,displayColors:false,callbacks:{label:(ctx)=>' '+ctx.parsed.y.toLocaleString()+' colaboradores'}}},scales:{y:{beginAtZero:true,grid:{display:false},border:{display:true,color:'#e0e0e0'},ticks:{font:{family:'Nunito',size:10},color:'#666'}},x:{grid:{display:false},border:{display:true,color:'#e0e0e0'},ticks:{display:false}}}}}); }
   const ctx3=document.getElementById('chart-desahucio');
-  if (ctx3) { new Chart(ctx3,{type:'doughnut',data:{labels:labels5,datasets:[{data:[302895,350000,400000,500000,800000],backgroundColor:palette5,borderColor:'#fff',borderWidth:2,borderRadius:3,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false},datalabels:{display:false},tooltip:donutTooltip}}}); renderLegend('legend-desahucio',labels5,palette5); }
+  if (ctx3) { new Chart(ctx3,{type:'doughnut',data:{labels:labels5,datasets:[{data:[302895,350000,400000,500000,800000],backgroundColor:palette5,borderColor:'#fff',borderWidth:2,borderRadius:3,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false},datalabels:{display:false},tooltip:donutTooltip}}}); }
+  renderLegend('legend-shared', labels6, palette6);
+}
+
+function initCardTilt() {
+  document.querySelectorAll('.fc-scene').forEach(scene => {
+    const glare = document.createElement('div');
+    glare.className = 'fc-glare';
+    scene.appendChild(glare);
+
+    const LAYERS = [
+      { sel: '.fc-btn-primary, .fc-btn-secondary', f: 0.45, sh: 0.51, extra: ', background 150ms ease' },
+      { sel: '.fc-title-txt',                       f: 0.30, sh: 0,    extra: '' },
+      { sel: '.fc-status-pill, .fc-icon-pill',      f: 0.45, sh: 0.51, extra: '' },
+    ];
+    const layerEls = layer => scene.querySelectorAll(layer.sel);
+
+    scene.addEventListener('mouseenter', () => {
+      scene.style.transition = 'transform 0.08s linear';
+      LAYERS.forEach(l => layerEls(l).forEach(el => {
+        el.style.transition = `transform 0.08s linear, box-shadow 0.08s linear${l.extra}`;
+      }));
+    });
+    scene.addEventListener('mousemove', e => {
+      const r = scene.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;
+      const y = (e.clientY - r.top) / r.height;
+      const rX = (0.5 - y) * 5;
+      const rY = (x - 0.5) * 5;
+      scene.style.transform = `perspective(900px) rotateX(${rX}deg) rotateY(${rY}deg) scale(1.02)`;
+      glare.style.opacity = '1';
+      glare.style.background = `radial-gradient(circle at ${x*100}% ${y*100}%, rgba(255,255,255,0.22) 0%, transparent 65%)`;
+      LAYERS.forEach(({ sel, f, sh }) => {
+        scene.querySelectorAll(sel).forEach(el => {
+          el.style.transform = `translate(${rY * f}px, ${-rX * f}px)`;
+          if (sh > 0) el.style.boxShadow = `${-rY * sh}px ${rX * sh}px ${sh * 28}px rgba(21,31,71,${(sh * 0.45).toFixed(2)})`;
+        });
+      });
+    });
+    scene.addEventListener('mouseleave', () => {
+      scene.style.transition = 'transform 0.55s ease';
+      scene.style.transform = '';
+      glare.style.opacity = '0';
+      LAYERS.forEach(l => layerEls(l).forEach(el => {
+        el.style.transition = `transform 0.55s ease, box-shadow 0.55s ease${l.extra}`;
+        el.style.transform = '';
+        el.style.boxShadow = '';
+      }));
+    });
+  });
 }
 
 initLayout('dashboard', 'dashboard');
 buildServicesGrid();
 initDashboardCharts();
+initCardTilt();
+
+document.querySelector('a[href="#mis-servicios"]').addEventListener('click', function(e) {
+  e.preventDefault();
+  const area = document.querySelector('.content-area');
+  const target = document.getElementById('mis-servicios');
+  area.scrollTo({ top: target.offsetTop - 24, behavior: 'smooth' });
+});
   </script>
 </body>
 </html>
