@@ -850,7 +850,7 @@ function initDashboardCharts() {
   if (ctx2) { new Chart(ctx2,{type:'bar',data:{labels:labels6,datasets:[{data:[307,254,120,78,45,8],backgroundColor:palette6,borderRadius:{topLeft:6,topRight:6,bottomLeft:0,bottomRight:0},borderSkipped:false,maxBarThickness:28,categoryPercentage:0.7,barPercentage:0.85}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:8}},plugins:{legend:{display:false},datalabels:{display:false},tooltip:{backgroundColor:'rgba(21,31,71,0.95)',titleFont:{family:'Nunito',size:12,weight:'600'},bodyFont:{family:'Nunito',size:12},padding:10,cornerRadius:6,displayColors:false,callbacks:{label:(ctx)=>' '+ctx.parsed.y.toLocaleString()+' colaboradores'}}},scales:{y:{beginAtZero:true,grid:{display:false},border:{display:true,color:'#e0e0e0'},ticks:{font:{family:'Nunito',size:10},color:'#666'}},x:{grid:{display:false},border:{display:true,color:'#e0e0e0'},ticks:{display:false}}}}}); }
   const ctx3=document.getElementById('chart-desahucio');
   if (ctx3) { new Chart(ctx3,{type:'doughnut',data:{labels:labels5,datasets:[{data:[302895,350000,400000,500000,800000],backgroundColor:palette5,borderColor:'#fff',borderWidth:2,borderRadius:3,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false},datalabels:{display:false},tooltip:donutTooltip}}}); }
-  renderLegend('legend-shared', labels6, palette6);
+  renderLegend('legend-shared', [...labels6].reverse(), [...palette6].reverse());
 }
 
 function initCardTilt() {
