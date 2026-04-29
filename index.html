@@ -806,8 +806,8 @@ function initLayout(activePage, activeTab) {
 function initDashboardCharts() {
   if (typeof Chart === 'undefined') return;
   if (typeof ChartDataLabels !== 'undefined') Chart.register(ChartDataLabels);
-  const palette6 = ['#a3cde8','#5b9bd5','#2e6aad','#1a3a6e','#091636','#7c8fb3'];
-  const palette5 = ['#a3cde8','#5b9bd5','#2e6aad','#1a3a6e','#091636'];
+  const palette6 = ['#BDE2FA','#8BC1F7','#519DE9','#0066CC','#002F5D','#06B6D4'];
+  const palette5 = ['#BDE2FA','#8BC1F7','#519DE9','#0066CC','#002F5D'];
   const donutTooltip = {
     callbacks: { label: (ctx) => { const v=ctx.parsed,t=ctx.dataset.data.reduce((a,b)=>a+b,0),p=(v/t*100).toFixed(1),f=v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); return ` $${f} (${p}%)`; } },
     backgroundColor:'rgba(21,31,71,0.95)', titleFont:{family:'Nunito',size:12,weight:'600'},
