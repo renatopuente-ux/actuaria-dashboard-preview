@@ -213,8 +213,39 @@ body {
 .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .whatsapp-fab { position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px; border-radius: 50%; background: var(--secondary); color: white; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 4px 12px rgba(37,211,102,0.4); z-index: 100; transition: transform 0.2s; border: none; cursor: pointer; }
 .whatsapp-fab:hover { transform: scale(1.1); }
-.section-header-row { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
+.section-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; gap: 12px; }
 .section-header-row .data-section-title { margin-bottom: 0; }
+.section-title-group { display: flex; align-items: center; gap: 10px; }
+.expand-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+  background: rgba(21,31,71,0.06); border: 1px solid rgba(21,31,71,0.14);
+  color: var(--primary); cursor: pointer; transition: all 0.15s;
+  text-decoration: none;
+}
+.expand-btn:hover { background: rgba(21,31,71,0.13); border-color: rgba(21,31,71,0.28); }
+.collapse-btn {
+  display: none; align-items: center; gap: 7px;
+  padding: 7px 14px; border-radius: 8px;
+  background: var(--primary); color: #fff;
+  border: none; cursor: pointer; font-family: var(--font-family);
+  font-size: 13px; font-weight: 600; flex-shrink: 0;
+}
+/* ── Fullscreen data mode ── */
+.app-layout.data-fullscreen .sidebar,
+.app-layout.data-fullscreen #top-header { display: none !important; }
+.app-layout.data-fullscreen .main-area { padding-left: 0; }
+.app-layout.data-fullscreen .content-area {
+  position: fixed; inset: 0; z-index: 150;
+  background: var(--background); overflow-y: auto; padding-top: 0;
+}
+.app-layout.data-fullscreen .content-inner { padding: 32px; max-width: 1600px; margin: 0 auto; margin-top: 0; }
+.app-layout.data-fullscreen .greeting-section,
+.app-layout.data-fullscreen #module-tabs,
+.app-layout.data-fullscreen .services-section { display: none; }
+.app-layout.data-fullscreen .expand-btn { display: none; }
+.app-layout.data-fullscreen .collapse-btn { display: inline-flex; }
+.app-layout.data-fullscreen .scroll-to-services { display: none; }
 .scroll-to-services { display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--primary); opacity: 0.5; transition: opacity 0.2s; padding: 2px 4px; flex-shrink: 0; margin-top: -41px; }
 .scroll-to-services:hover { opacity: 1; }
 .scroll-cols { display: flex; flex-direction: row; gap: 3px; }
@@ -572,7 +603,16 @@ body {
 
           <!-- Data Section -->
           <div class="section-header-row">
-            <h4 class="data-section-title">Datos correspondientes al 31 de diciembre del 2024</h4>
+            <div class="section-title-group">
+              <h4 class="data-section-title">Datos correspondientes al 31 de diciembre del 2024</h4>
+              <button class="expand-btn" id="expand-data-btn" title="Expandir vista">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+              </button>
+              <button class="collapse-btn" id="collapse-data-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v5H3"/><path d="M21 8h-5V3"/><path d="M3 16h5v5"/><path d="M16 21v-5h5"/></svg>
+                Cerrar vista completa
+              </button>
+            </div>
             <a href="#mis-servicios" class="scroll-to-services" title="Ver mis servicios">
               <span class="scroll-cols">
                 <span class="scroll-label">Ver mis</span>
@@ -1075,6 +1115,17 @@ initLayout('dashboard', 'dashboard');
 buildServicesGrid();
 initDashboardCharts();
 initCardTilt();
+
+document.getElementById('expand-data-btn').addEventListener('click', () => {
+  document.querySelector('.app-layout').classList.add('data-fullscreen');
+  document.querySelector('.content-area').scrollTop = 0;
+});
+document.getElementById('collapse-data-btn').addEventListener('click', () => {
+  document.querySelector('.app-layout').classList.remove('data-fullscreen');
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelector('.app-layout').classList.remove('data-fullscreen');
+});
 
 document.querySelector('a[href="#mis-servicios"]').addEventListener('click', function(e) {
   e.preventDefault();
