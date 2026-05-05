@@ -395,6 +395,9 @@ body {
   overflow: hidden;
   border: 1px solid rgba(0,17,102,0.1);
   box-shadow: var(--shadow-overlay);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translateZ(0);
 }
 /* FRONT */
 .fc-front { background: #fff; display: flex; flex-direction: column; }
@@ -1021,7 +1024,7 @@ function initCardTilt() {
       const y = (e.clientY - r.top) / r.height;
       const rX = (0.5 - y) * 5;
       const rY = (x - 0.5) * 5;
-      scene.style.transform = `perspective(900px) rotateX(${rX}deg) rotateY(${rY}deg) scale(1.02)`;
+      scene.style.transform = `rotateX(${rX}deg) rotateY(${rY}deg) scale(1.02)`;
       glare.style.opacity = '1';
       glare.style.background = `radial-gradient(circle at ${x*100}% ${y*100}%, rgba(255,255,255,0.22) 0%, transparent 65%)`;
       LAYERS.forEach(({ sel, f, sh }) => {
