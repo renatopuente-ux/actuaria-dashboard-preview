@@ -217,10 +217,11 @@ body {
 .section-header-row .data-section-title { margin-bottom: 0; }
 .section-title-group { display: flex; align-items: center; gap: 10px; }
 .expand-btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 0 10px; height: 30px; border-radius: 8px; flex-shrink: 0;
   background: rgba(21,31,71,0.06); border: 1px solid rgba(21,31,71,0.14);
   color: var(--primary); cursor: pointer; transition: all 0.15s;
+  font-family: var(--font-family); font-size: 13px; font-weight: 600;
   text-decoration: none;
 }
 .expand-btn:hover { background: rgba(21,31,71,0.13); border-color: rgba(21,31,71,0.28); }
@@ -607,6 +608,7 @@ body {
               <h4 class="data-section-title">Datos correspondientes al 31 de diciembre del 2024</h4>
               <button class="expand-btn" id="expand-data-btn" title="Expandir vista">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+                Expandir
               </button>
               <button class="collapse-btn" id="collapse-data-btn">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v5H3"/><path d="M21 8h-5V3"/><path d="M3 16h5v5"/><path d="M16 21v-5h5"/></svg>
