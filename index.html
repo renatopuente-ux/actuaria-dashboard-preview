@@ -397,7 +397,6 @@ body {
   box-shadow: var(--shadow-overlay);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transform: translateZ(0);
 }
 /* FRONT */
 .fc-front { background: #fff; display: flex; flex-direction: column; }
@@ -1022,27 +1021,14 @@ function initCardTilt() {
       const r = scene.getBoundingClientRect();
       const x = (e.clientX - r.left) / r.width;
       const y = (e.clientY - r.top) / r.height;
-      const rX = (0.5 - y) * 5;
-      const rY = (x - 0.5) * 5;
-      scene.style.transform = `rotateX(${rX}deg) rotateY(${rY}deg) scale(1.02)`;
+      scene.style.transform = `scale(1.02)`;
       glare.style.opacity = '1';
       glare.style.background = `radial-gradient(circle at ${x*100}% ${y*100}%, rgba(255,255,255,0.22) 0%, transparent 65%)`;
-      LAYERS.forEach(({ sel, f, sh }) => {
-        scene.querySelectorAll(sel).forEach(el => {
-          el.style.transform = `translate(${rY * f}px, ${-rX * f}px)`;
-          if (sh > 0) el.style.boxShadow = `${-rY * sh}px ${rX * sh}px ${sh * 28}px rgba(21,31,71,${(sh * 0.45).toFixed(2)})`;
-        });
-      });
     });
     scene.addEventListener('mouseleave', () => {
       scene.style.transition = 'transform 0.55s ease';
       scene.style.transform = '';
       glare.style.opacity = '0';
-      LAYERS.forEach(l => layerEls(l).forEach(el => {
-        el.style.transition = `transform 0.55s ease, box-shadow 0.55s ease${l.extra}`;
-        el.style.transform = '';
-        el.style.boxShadow = '';
-      }));
     });
   });
 }
