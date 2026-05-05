@@ -247,6 +247,16 @@ body {
 .app-layout.data-fullscreen .expand-btn { display: none; }
 .app-layout.data-fullscreen .collapse-btn { display: inline-flex; }
 .app-layout.data-fullscreen .scroll-to-services { display: none; }
+.fullscreen-topbar {
+  display: none;
+}
+.app-layout.data-fullscreen .fullscreen-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 32px;
+  background: var(--primary);
+  position: sticky; top: 0; z-index: 10;
+  flex-shrink: 0;
+}
 .scroll-to-services { display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--primary); opacity: 0.5; transition: opacity 0.2s; padding: 2px 4px; flex-shrink: 0; margin-top: -41px; }
 .scroll-to-services:hover { opacity: 1; }
 .scroll-cols { display: flex; flex-direction: row; gap: 3px; }
@@ -591,6 +601,9 @@ body {
     <div class="main-area">
       <div id="top-header"></div>
       <div class="content-area">
+        <div class="fullscreen-topbar">
+          <img src="https://earnest-hamster-c08c0c.netlify.app/assets/logos/compass_logo_blanco.svg" alt="Actuaria Plus" style="height:28px;">
+        </div>
         <div class="content-inner">
 
           <!-- Greeting -->
