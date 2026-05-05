@@ -262,11 +262,33 @@ body {
   display: none;
 }
 .app-layout.data-fullscreen .fullscreen-topbar {
-  display: flex; align-items: center;
+  display: flex; align-items: center; justify-content: space-between;
   padding: 16px 32px 8px;
   background: var(--background);
   position: sticky; top: 0; z-index: 10;
   flex-shrink: 0;
+}
+.topbar-actions { display: flex; align-items: center; gap: 8px; }
+.topbar-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 0 14px; height: 34px; border-radius: 8px;
+  background: rgba(21,31,71,0.06); border: 1px solid rgba(21,31,71,0.14);
+  color: var(--primary); cursor: pointer; transition: all 0.15s;
+  font-family: var(--font-family); font-size: var(--fs-xs); font-weight: 600;
+}
+.topbar-btn:hover { background: rgba(21,31,71,0.12); border-color: rgba(21,31,71,0.28); }
+@media print {
+  .sidebar, #top-header, .topbar-actions, .collapse-btn,
+  .scroll-to-services, .whatsapp-fab, .greeting-section,
+  .module-tabs, .services-section, .ic-action,
+  .expand-btn { display: none !important; }
+  body { overflow: visible !important; }
+  .app-layout { display: block !important; }
+  .main-area { padding-left: 0 !important; }
+  .content-area { position: static !important; overflow: visible !important; padding-top: 0 !important; }
+  .fullscreen-topbar { display: flex !important; position: static !important; padding: 12px 0 8px !important; }
+  .content-inner { padding: 20px 0 !important; max-width: 100% !important; }
+  .insights-grid { display: grid !important; }
 }
 .scroll-to-services { display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--primary); opacity: 0.5; transition: opacity 0.2s; padding: 2px 4px; flex-shrink: 0; margin-top: -41px; }
 .scroll-to-services:hover { opacity: 1; }
@@ -663,6 +685,16 @@ body {
   <path d="M127.854 13.2304C128.342 12.9319 128.858 12.6604 129.428 12.4704C129.971 12.2804 130.514 12.1176 131.084 11.9818C131.627 11.8461 132.169 11.7647 132.712 11.7104C133.228 11.6833 133.744 11.6561 134.205 11.6561C136.132 11.6561 137.598 12.1176 138.603 13.0404C139.607 13.9905 140.095 15.2662 140.095 16.922V25.4994H135.752V24.4136C135.155 24.8751 134.477 25.2279 133.717 25.4451C132.93 25.6622 132.115 25.7708 131.274 25.7708C129.998 25.7708 128.994 25.418 128.207 24.7394C127.419 24.0608 127.039 23.165 127.039 22.025C127.039 21.1293 127.256 20.4235 127.664 19.9078C128.071 19.3921 128.614 18.9578 129.238 18.6592C129.862 18.3606 130.541 18.1434 131.274 18.0077C132.007 17.872 132.712 17.7363 133.364 17.6277C133.988 17.5191 134.531 17.3834 134.992 17.2477C135.454 17.112 135.698 16.8677 135.725 16.542C135.752 16.2977 135.59 16.0534 135.182 15.8091C134.775 15.5919 134.178 15.4834 133.337 15.4834C132.712 15.4834 132.007 15.5648 131.247 15.7548C130.459 15.9448 129.564 16.352 128.559 16.922L127.854 13.2304ZM131.518 21.835C131.518 22.3507 131.871 22.595 132.604 22.595C132.957 22.595 133.337 22.5407 133.69 22.4593C134.042 22.3779 134.341 22.2421 134.64 22.0793C134.938 21.9436 135.182 21.7807 135.372 21.5907C135.562 21.4007 135.698 21.2378 135.752 21.0478V19.6635C135.264 19.8264 134.775 19.9621 134.26 20.0707C133.744 20.2064 133.31 20.3149 132.902 20.4507C132.495 20.5864 132.142 20.7764 131.898 20.9664C131.654 21.1835 131.518 21.4821 131.518 21.835Z" fill="#E0592A"/>
   <path d="M153.826 11.6603C153.949 11.6603 154.049 11.76 154.049 11.883V15.9185C154.049 16.1645 154.248 16.3638 154.494 16.3638H158.777C158.9 16.3638 159 16.4635 159 16.5865V20.8757C159 20.9987 158.9 21.0984 158.777 21.0984H154.494C154.248 21.0984 154.049 21.2978 154.049 21.5437V25.5483C154.049 25.6713 153.949 25.771 153.826 25.771H149.475C149.352 25.771 149.253 25.6713 149.253 25.5483V21.5437C149.253 21.2978 149.053 21.0984 148.807 21.0984H144.493C144.37 21.0984 144.27 20.9987 144.27 20.8757V16.5865C144.27 16.4635 144.37 16.3638 144.493 16.3638H148.807C149.053 16.3638 149.253 16.1645 149.253 15.9185V11.883C149.253 11.76 149.352 11.6603 149.475 11.6603H153.826Z" fill="#E0592A"/>
 </svg>
+          <div class="topbar-actions">
+            <button class="topbar-btn" id="share-btn" title="Compartir">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              Compartir
+            </button>
+            <button class="topbar-btn" id="pdf-btn" title="Descargar PDF">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Descargar PDF
+            </button>
+          </div>
         </div>
         <div class="content-inner">
 
@@ -1223,6 +1255,25 @@ initLayout('dashboard', 'dashboard');
 buildServicesGrid();
 initDashboardCharts();
 initCardTilt();
+
+document.getElementById('share-btn').addEventListener('click', async () => {
+  const data = { title: 'Actuaria Plus — Datos al 31/12/2024', url: window.location.href };
+  const btn = document.getElementById('share-btn');
+  if (navigator.share) {
+    try { await navigator.share(data); } catch(e) {}
+  } else {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      const orig = btn.innerHTML;
+      btn.textContent = '¡Enlace copiado!';
+      setTimeout(() => { btn.innerHTML = orig; }, 2000);
+    } catch(e) {}
+  }
+});
+
+document.getElementById('pdf-btn').addEventListener('click', () => {
+  window.print();
+});
 
 function gotoService() {
   document.querySelector('.app-layout').classList.remove('data-fullscreen');
