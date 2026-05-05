@@ -423,6 +423,41 @@ body {
 .variant-a .chart-card .chart-title { font-size: var(--fs-sm) !important; text-transform: none; letter-spacing: 0.3px; color: #8a8fa3 !important; font-weight: 600 !important; }
 .variant-a .chart-card .chart-body { padding: 0 20px 20px; }
 
+/* ─── Insight Cards — semáforo ─── */
+.insights-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 20px; }
+.insight-card {
+  background: var(--surface); border-radius: 16px; box-shadow: var(--shadow-card);
+  padding: 20px; display: flex; flex-direction: column; gap: 10px;
+}
+.ic-green  { border-top: 3px solid #10B981; }
+.ic-orange { border-top: 3px solid #F59E0B; }
+.ic-red    { border-top: 3px solid #EF4444; }
+.ic-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 9999px; align-self: flex-start;
+  font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+}
+.ic-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.ic-green  .ic-badge { background: #d1fae5; color: #065f46; }
+.ic-orange .ic-badge { background: #fef3c7; color: #92400e; }
+.ic-red    .ic-badge { background: #fee2e2; color: #991b1b; }
+.ic-green  .ic-dot { background: #10B981; }
+.ic-orange .ic-dot { background: #F59E0B; }
+.ic-red    .ic-dot { background: #EF4444; }
+.ic-title { font-size: var(--fs-base); font-weight: 700; color: var(--primary); line-height: 1.3; }
+.ic-body  { font-size: var(--fs-xs); color: rgba(0,9,51,0.65); line-height: 1.6; flex: 1; }
+.ic-action {
+  display: inline-flex; align-items: center; gap: 6px; margin-top: 6px;
+  padding: 8px 14px; border-radius: 8px; text-decoration: none; border: none; cursor: pointer;
+  font-family: var(--font-family); font-size: var(--fs-xs); font-weight: 600; transition: all 0.15s;
+}
+.ic-green  .ic-action { background: #d1fae5; color: #065f46; }
+.ic-green  .ic-action:hover { background: #a7f3d0; }
+.ic-orange .ic-action { background: #fef3c7; color: #92400e; }
+.ic-orange .ic-action:hover { background: #fde68a; }
+.ic-red    .ic-action { background: #fee2e2; color: #991b1b; }
+.ic-red    .ic-action:hover { background: #fecaca; }
+
 /* ─── CardFeatured v2 — Flip Card Design (referencia Estudio Actuarial) ─── */
 .fc-scene { perspective: 1800px; height: 380px; position: relative; }
 .fc-glare { position: absolute; inset: 0; border-radius: 16px; pointer-events: none; z-index: 50; opacity: 0; transition: opacity 0.4s ease; }
@@ -733,6 +768,41 @@ body {
                 <div class="chart-placeholder"><canvas id="chart-desahucio"></canvas></div>
               </div>
             </div>
+          </div>
+
+          <!-- Insights — semáforo actuarial -->
+          <div class="insights-grid">
+
+            <div class="insight-card ic-green">
+              <div class="ic-badge"><span class="ic-dot"></span>Positivo</div>
+              <div class="ic-title">Provisión en tendencia positiva</div>
+              <div class="ic-body">La reserva total creció 4.2% vs 2023 y cubre tanto jubilación patronal ($6.98M) como desahucio ($2.35M). El nivel actual se mantiene alineado con las obligaciones proyectadas y el crecimiento salarial observado (+2.1%).</div>
+              <button class="ic-action" onclick="gotoService()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                Ver proyecciones en Estudio Actuarial
+              </button>
+            </div>
+
+            <div class="insight-card ic-orange">
+              <div class="ic-badge"><span class="ic-dot"></span>Atención</div>
+              <div class="ic-title">Concentración en quinquenios tempranos</div>
+              <div class="ic-body">El 69% de los partícipes activos lleva menos de 15 años de servicio (561 de 812). Esta estructura eleva la tasa de rotación esperada y puede reducir el costo promedio de beneficio en el corto plazo, alterando las reservas proyectadas.</div>
+              <button class="ic-action" onclick="gotoService()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                Simular escenarios en Simulador de beneficios
+              </button>
+            </div>
+
+            <div class="insight-card ic-red">
+              <div class="ic-badge"><span class="ic-dot"></span>Alerta</div>
+              <div class="ic-title">Brecha demográfica de género</div>
+              <div class="ic-body">Solo el 12% de los partícipes son mujeres (152 de 1,297). Una composición tan asimétrica puede invalidar las hipótesis actuariales de tablas de mortalidad y tasas de rotación diferencial, afectando la exactitud del estudio.</div>
+              <button class="ic-action" onclick="gotoService()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                Revisar supuestos en Actas de jubilación
+              </button>
+            </div>
+
           </div>
 
           <!-- Services Section — CardFeatured con flip 3D -->
@@ -1123,6 +1193,14 @@ initLayout('dashboard', 'dashboard');
 buildServicesGrid();
 initDashboardCharts();
 initCardTilt();
+
+function gotoService() {
+  document.querySelector('.app-layout').classList.remove('data-fullscreen');
+  setTimeout(() => {
+    const target = document.getElementById('mis-servicios');
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  }, 80);
+}
 
 document.getElementById('expand-data-btn').addEventListener('click', () => {
   document.querySelector('.app-layout').classList.add('data-fullscreen');
