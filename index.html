@@ -736,12 +736,12 @@ body {
                 <span class="kpi-title">Provisión acumulada</span>
                 <span class="kpi-header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#151F47" stroke-width="1.8" stroke-linecap="round" width="18" height="18"><path d="M19 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/><path d="M3 10h18"/></svg></span>
               </div>
-              <div class="kpi-hero">$9.34M</div>
+              <div class="kpi-hero">$9M</div>
               <div class="kpi-hero-label">USD · Total acumulado</div>
-              <div class="kpi-trend">↑ +4.2% vs 2023</div>
+              <div class="kpi-trend">↑ +4% vs 2023</div>
               <div class="kpi-body">
-                <div class="kpi-row"><span class="kpi-label">Jubilación Patronal</span><span class="kpi-value">$6.98M</span></div>
-                <div class="kpi-row"><span class="kpi-label">Desahucio</span><span class="kpi-value">$2.35M</span></div>
+                <div class="kpi-row"><span class="kpi-label">Jubilación Patronal</span><span class="kpi-value">$7M</span></div>
+                <div class="kpi-row"><span class="kpi-label">Desahucio</span><span class="kpi-value">$2M</span></div>
               </div>
             </div>
             <div class="kpi-card">
@@ -749,12 +749,12 @@ body {
                 <span class="kpi-title">Remuneración promedio</span>
                 <span class="kpi-header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#151F47" stroke-width="1.8" width="18" height="18"><circle cx="12" cy="12" r="9"/><path d="M14.5 9h-3a1.5 1.5 0 0 0 0 3h2a1.5 1.5 0 0 1 0 3h-3.5" stroke-linecap="round"/></svg></span>
               </div>
-              <div class="kpi-hero">$855<span style="font-size:var(--fs-h6)">.85</span></div>
+              <div class="kpi-hero">$856</div>
               <div class="kpi-hero-label">USD · Promedio total</div>
-              <div class="kpi-trend">↑ +2.1% vs 2023</div>
+              <div class="kpi-trend">↑ +2% vs 2023</div>
               <div class="kpi-body">
-                <div class="kpi-row"><span class="kpi-label">Hombres</span><span class="kpi-value">$851.95</span></div>
-                <div class="kpi-row"><span class="kpi-label">Mujeres</span><span class="kpi-value">$885.69</span></div>
+                <div class="kpi-row"><span class="kpi-label">Hombres</span><span class="kpi-value">$852</span></div>
+                <div class="kpi-row"><span class="kpi-label">Mujeres</span><span class="kpi-value">$886</span></div>
               </div>
             </div>
             <div class="kpi-card">
@@ -764,7 +764,7 @@ body {
               </div>
               <div class="kpi-hero">1,297</div>
               <div class="kpi-hero-label">Partícipes activos</div>
-              <div class="kpi-trend">↑ +3.6% vs 2023</div>
+              <div class="kpi-trend">↑ +4% vs 2023</div>
               <div class="kpi-body">
                 <div class="kpi-row"><span class="kpi-label">Hombres</span><span class="kpi-value">1,145 · 88%</span></div>
                 <div class="kpi-row"><span class="kpi-label">Mujeres</span><span class="kpi-value">152 · 12%</span></div>
@@ -1177,7 +1177,7 @@ function initDashboardCharts() {
   const palette6 = ['#BDE2FA','#8BC1F7','#519DE9','#0066CC','#002F5D','#06B6D4'];
   const palette5 = ['#BDE2FA','#8BC1F7','#519DE9','#0066CC','#002F5D'];
   const donutTooltip = {
-    callbacks: { label: (ctx) => { const v=ctx.parsed,t=ctx.dataset.data.reduce((a,b)=>a+b,0),p=(v/t*100).toFixed(1),f=v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); return ` $${f} (${p}%)`; } },
+    callbacks: { label: (ctx) => { const v=ctx.parsed,t=ctx.dataset.data.reduce((a,b)=>a+b,0),p=(v/t*100).toFixed(0),f=v.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); return ` $${f} (${p}%)`; } },
     backgroundColor:'rgba(21,31,71,0.95)', titleFont:{family:'Nunito',size:12,weight:'600'},
     bodyFont:{family:'Nunito',size:12}, padding:10, cornerRadius:6, displayColors:false
   };
