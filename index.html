@@ -1186,7 +1186,11 @@ function initDashboardCharts() {
   const palette5 = ['#BDE2FA','#8BC1F7','#519DE9','#0066CC','#002F5D'];
   const _gtEl = (() => { const el=document.createElement('div'); el.id='chart-glass-tooltip'; el.innerHTML='<div class="cgt-title"></div><div class="cgt-body"></div>'; document.body.appendChild(el); return el; })();
   function externalGlassTooltip({chart,tooltip}) {
-    if (tooltip.opacity===0) { _gtEl.style.opacity='0'; return; }
+    if (tooltip.opacity===0) {
+      if (_gtEl.dataset.owner===String(chart.id)) _gtEl.style.opacity='0';
+      return;
+    }
+    _gtEl.dataset.owner = String(chart.id);
     _gtEl.querySelector('.cgt-title').textContent = tooltip.title?.[0] ?? '';
     _gtEl.querySelector('.cgt-body').textContent = tooltip.body?.flatMap(b=>b.lines)[0]?.trim() ?? '';
     const r = chart.canvas.getBoundingClientRect();
