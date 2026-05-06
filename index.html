@@ -239,8 +239,10 @@ body {
 }
 .chart-placeholder canvas { max-width: 100%; max-height: 100%; }
 /* Services */
-.services-section { margin-top: 36px; }
-.services-section > h1 { font-size: var(--fs-h5); font-weight: 500; color: var(--text-primary); margin-bottom: 28px; }
+.services-section { margin-top: 36px; padding: 28px; border-radius: 20px; position: relative; background: radial-gradient(circle, rgba(21,31,71,0.07) 1px, transparent 1px) 0 0 / 28px 28px, linear-gradient(rgba(21,31,71,0.028) 1px, transparent 1px) 0 0 / 28px 28px, linear-gradient(90deg, rgba(21,31,71,0.028) 1px, transparent 1px) 0 0 / 28px 28px, rgba(21,31,71,0.012); }
+.services-section::before { content:''; position:absolute; inset:0; border-radius:20px; pointer-events:none; background: radial-gradient(ellipse 55% 55% at 88% 12%, rgba(76,100,217,0.08) 0%, transparent 70%), radial-gradient(ellipse 40% 50% at 10% 88%, rgba(21,31,71,0.06) 0%, transparent 70%); }
+.services-section > h1 { font-size: var(--fs-h5); font-weight: 500; color: var(--text-primary); margin-bottom: 28px; position: relative; z-index: 1; }
+.services-section > .services-grid { position: relative; z-index: 1; }
 .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .whatsapp-fab { position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px; border-radius: 50%; background: var(--secondary); color: white; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 4px 12px rgba(37,211,102,0.4); z-index: 100; transition: transform 0.2s; border: none; cursor: pointer; }
 .whatsapp-fab:hover { transform: scale(1.1); }
@@ -531,17 +533,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 /* FRONT */
-.fc-front { background: #fff; display: flex; flex-direction: column; }
+.fc-front { background: linear-gradient(to bottom, transparent 152px, #fff 152px); display: flex; flex-direction: column; }
 .fc-front-inner {
   opacity: 1; transition: opacity 350ms ease; transition-delay: 350ms;
   display: flex; flex-direction: column; height: 100%;
 }
 .fc-card.flipped .fc-front-inner { opacity: 0; transition-delay: 0ms; }
 .fc-header {
-  height: 128px;
-  background: linear-gradient(180deg, #151f47 0%, #0c1230 100%);
+  height: 152px;
   position: relative; flex-shrink: 0; overflow: hidden;
-  border-bottom: 1px solid rgba(0,17,102,0.1);
+  backdrop-filter: blur(22px) saturate(1.9);
+  -webkit-backdrop-filter: blur(22px) saturate(1.9);
+  background: rgba(255,255,255,0.28);
+  border-bottom: 1px solid rgba(255,255,255,0.5);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
 }
 .fc-formulas {
   position: absolute; left: 18px; top: 14px;
@@ -552,11 +557,13 @@ body {
   position: absolute; top: 12px; right: 12px;
   display: inline-flex; align-items: center; gap: 6px;
   padding: 4px 10px;
-  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22);
-  border-radius: 48px; font-size: var(--fs-xs); font-weight: 600; color: #fff;
+  background: rgba(21,31,71,0.07); border: 1px solid rgba(21,31,71,0.16);
+  border-radius: 48px; font-size: var(--fs-xs); font-weight: 600; color: #151f47;
   font-family: var(--font-family);
 }
 .fc-status-dot { width: 6px; height: 6px; border-radius: 9999px; background: #10B981; }
+.fc-header-icon { position: absolute; top: 16px; left: 18px; width: 40px; height: 40px; border-radius: 11px; background: rgba(21,31,71,0.09); border: 1px solid rgba(21,31,71,0.13); display: flex; align-items: center; justify-content: center; color: #151f47; }
+.fc-header-title { position: absolute; bottom: 18px; left: 18px; right: 18px; font-size: var(--fs-base); font-weight: 700; color: rgba(21,31,71,0.88); line-height: 1.3; letter-spacing: -0.2px; }
 .fc-header-chart {
   position: absolute; left: 0; right: 0; top: 36px; bottom: 0;
   overflow: hidden; pointer-events: none;
@@ -998,8 +1005,6 @@ function buildChartSVG(pts, id) {
 }
 
 function buildServiceCard(s) {
-  const chartSvg = s.illus || buildChartSVG(s.pts, s.id);
-  const formulasHtml = s.formulas.map(f => `<div>${f}</div>`).join('');
   const badgesHtml = s.badges.map(b => `<span class="fc-badge">${b}</span>`).join('');
   const checkHtml = s.checklist.map(c => `<div class="fc-check-item">${CHECK_SVG}<span>${c}</span></div>`).join('');
   const titleHtml = s.titleSup
@@ -1011,9 +1016,9 @@ function buildServiceCard(s) {
       <div class="fc-face fc-front">
         <div class="fc-front-inner">
           <div class="fc-header">
-            <div class="fc-formulas">${formulasHtml}</div>
+            <div class="fc-header-icon">${s.icon}</div>
             <div class="fc-status-pill"><span class="fc-status-dot"></span>Activo</div>
-            <div class="fc-header-chart">${chartSvg}</div>
+            <div class="fc-header-title">${s.title}</div>
           </div>
           <div class="fc-body">
             <div class="fc-icon-row">
