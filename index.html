@@ -615,12 +615,26 @@ body {
 }
 .fc-header::before {
   content: '';
-  position: absolute; inset: 0;
+  position: absolute; inset: -25%;
   background:
     radial-gradient(ellipse 90% 100% at 8% 0%,   rgba(76,100,217,0.28) 0%, transparent 60%),
     radial-gradient(ellipse 65% 75% at 92% 100%,  rgba(6,182,212,0.20)  0%, transparent 55%),
     radial-gradient(ellipse 55% 60% at 52% 48%,   rgba(81,157,233,0.12) 0%, transparent 65%);
+  animation: gradDrift 14s ease-in-out infinite alternate;
   z-index: 0;
+}
+.services-grid > :nth-child(1) .fc-header::before { animation-duration: 14s; animation-delay:  0s; }
+.services-grid > :nth-child(2) .fc-header::before { animation-duration: 18s; animation-delay: -5s; }
+.services-grid > :nth-child(3) .fc-header::before { animation-duration: 16s; animation-delay: -9s; }
+.services-grid > :nth-child(4) .fc-header::before { animation-duration: 20s; animation-delay: -3s; }
+.services-grid > :nth-child(5) .fc-header::before { animation-duration: 15s; animation-delay: -7s; }
+.services-grid > :nth-child(6) .fc-header::before { animation-duration: 17s; animation-delay:-11s; }
+@keyframes gradDrift {
+  0%   { transform: translate(  0%,   0%); }
+  25%  { transform: translate(  8%,  -7%); }
+  50%  { transform: translate( -6%,   9%); }
+  75%  { transform: translate(  7%,   6%); }
+  100% { transform: translate( -8%,  -5%); }
 }
 .fc-header::after {
   content: '';
