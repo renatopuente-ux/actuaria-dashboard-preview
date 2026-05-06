@@ -1232,7 +1232,7 @@ function initDashboardCharts() {
   }
   function _dimInChart(chart, activeIdx) {
     const orig = _origColors[chart.id]; if (!orig) return;
-    chart.data.datasets[0].backgroundColor = orig.map((c,i) => i===activeIdx ? c : _hex2rgba(c,0.2));
+    chart.data.datasets[0].backgroundColor = orig.map((c,i) => i===activeIdx ? c : _hex2rgba(c,0.75));
     chart.update('none');
   }
   function _restoreInChart(chart) {
@@ -1295,6 +1295,8 @@ function initDashboardCharts() {
           _dimInChart(_desahucio, idx);
           const cp = _desahucio.getDatasetMeta(0).data[idx]?.getCenterPoint?.();
           if (cp) { const r=_desahucio.canvas.getBoundingClientRect(); showGT(_desahucio,idx,r.left+cp.x,r.top+cp.y); }
+        } else if (activate) {
+          _dimInChart(_desahucio, -1); hideGT(_desahucio);
         } else { _restoreInChart(_desahucio); hideGT(_desahucio); }
       }
     });
