@@ -214,6 +214,35 @@ body {
 .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; background: var(--cb-color, #ccc); }
 .chart-legend-item { border: 1.5px solid transparent; transition: background 0.15s, border-color 0.15s; }
 .chart-legend-item.legend-active { background: rgba(21,31,71,0.08); border-color: var(--cb-color, #ccc); }
+
+/* ── Neumorfismo — leyenda Quinquenio ── */
+#legend-shared {
+  background: #eceef4;
+  border-radius: 12px;
+  padding: 10px 8px;
+  gap: 9px !important;
+}
+#legend-shared .chart-legend-item {
+  background: #eceef4;
+  border: none !important;
+  border-radius: 10px;
+  padding: 9px 12px;
+  box-shadow: 5px 5px 10px rgba(21,31,71,0.13), -5px -5px 10px rgba(255,255,255,1);
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+#legend-shared .chart-legend-item:hover {
+  box-shadow: 3px 3px 7px rgba(21,31,71,0.15), -3px -3px 7px rgba(255,255,255,1);
+}
+#legend-shared .chart-legend-item.legend-active {
+  background: #e5e7ef;
+  box-shadow: inset 4px 4px 8px rgba(21,31,71,0.13), inset -4px -4px 8px rgba(255,255,255,0.9);
+  transform: none;
+}
+#legend-shared .legend-dot {
+  width: 12px; height: 12px;
+  box-shadow: inset 2px 2px 3px rgba(0,0,0,0.2), 2px 2px 4px rgba(21,31,71,0.18);
+  border-radius: 4px;
+}
 .chart-glass-tooltip {
   position: fixed; pointer-events: none; z-index: 9999; opacity: 0;
   transition: opacity 0.15s ease;
