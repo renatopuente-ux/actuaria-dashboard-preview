@@ -239,7 +239,7 @@ body {
 }
 .chart-placeholder canvas { max-width: 100%; max-height: 100%; }
 /* Services */
-.services-section { margin-top: 36px; padding: 28px; border-radius: 20px; position: relative; background: radial-gradient(circle, rgba(21,31,71,0.07) 1px, transparent 1px) 0 0 / 28px 28px, linear-gradient(rgba(21,31,71,0.028) 1px, transparent 1px) 0 0 / 28px 28px, linear-gradient(90deg, rgba(21,31,71,0.028) 1px, transparent 1px) 0 0 / 28px 28px, rgba(21,31,71,0.012); }
+.services-section { margin-top: 36px; padding: 28px; border-radius: 20px; position: relative; background: radial-gradient(circle, rgba(21,31,71,0.14) 1px, transparent 1px) 0 0 / 28px 28px, linear-gradient(rgba(21,31,71,0.07) 1px, transparent 1px) 0 0 / 28px 28px, linear-gradient(90deg, rgba(21,31,71,0.07) 1px, transparent 1px) 0 0 / 28px 28px, rgba(21,31,71,0.025); }
 .services-section::before { content:''; position:absolute; inset:0; border-radius:20px; pointer-events:none; background: radial-gradient(ellipse 55% 55% at 88% 12%, rgba(76,100,217,0.08) 0%, transparent 70%), radial-gradient(ellipse 40% 50% at 10% 88%, rgba(21,31,71,0.06) 0%, transparent 70%); }
 .services-section > h1 { font-size: var(--fs-h5); font-weight: 500; color: var(--text-primary); margin-bottom: 28px; position: relative; z-index: 1; }
 .services-section > .services-grid { position: relative; z-index: 1; }
@@ -563,7 +563,7 @@ body {
 }
 .fc-status-dot { width: 6px; height: 6px; border-radius: 9999px; background: #10B981; }
 .fc-header-icon { position: absolute; top: 16px; left: 18px; width: 40px; height: 40px; border-radius: 11px; background: rgba(21,31,71,0.09); border: 1px solid rgba(21,31,71,0.13); display: flex; align-items: center; justify-content: center; color: #151f47; }
-.fc-header-title { position: absolute; bottom: 18px; left: 18px; right: 18px; font-size: var(--fs-base); font-weight: 700; color: rgba(21,31,71,0.88); line-height: 1.3; letter-spacing: -0.2px; }
+.fc-header-title { position: absolute; bottom: 18px; left: 18px; right: 18px; font-size: var(--fs-h5); font-weight: 700; color: rgba(21,31,71,0.9); line-height: 1.25; letter-spacing: -0.4px; }
 .fc-header-chart {
   position: absolute; left: 0; right: 0; top: 36px; bottom: 0;
   overflow: hidden; pointer-events: none;
@@ -571,7 +571,7 @@ body {
 .fc-header-chart > svg {
   position: absolute; bottom: 0; right: 14px;
 }
-.fc-body { flex: 1; padding: 14px 18px; display: flex; flex-direction: column; overflow: hidden; }
+.fc-body { flex: 1; padding: 14px 18px; display: flex; flex-direction: column; }
 .fc-icon-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .fc-icon-pill {
   width: 36px; height: 36px; border-radius: 36px;
@@ -581,7 +581,7 @@ body {
 }
 .fc-eyebrow {
   font-size: var(--fs-xs); font-weight: 700; letter-spacing: 1.8px;
-  text-transform: uppercase; color: rgba(0,9,51,0.65);
+  text-transform: uppercase; color: rgba(0,9,51,0.65); margin-bottom: 8px;
 }
 .fc-title {
   font-size: var(--fs-base); font-weight: 700; color: rgba(0,6,38,0.9);
@@ -1021,11 +1021,7 @@ function buildServiceCard(s) {
             <div class="fc-header-title">${s.title}</div>
           </div>
           <div class="fc-body">
-            <div class="fc-icon-row">
-              <div class="fc-icon-pill">${s.icon}</div>
-              <div class="fc-eyebrow">${s.eyebrow}</div>
-            </div>
-            <div class="fc-title"><span class="fc-title-txt">${titleHtml}</span></div>
+            <div class="fc-eyebrow">${s.eyebrow}</div>
             <div class="fc-desc">${s.desc}</div>
             <div class="fc-actions">
               <a href="#" class="fc-btn-primary">
@@ -1390,7 +1386,6 @@ function initCardTilt() {
       const r = scene.getBoundingClientRect();
       const x = (e.clientX - r.left) / r.width;
       const y = (e.clientY - r.top) / r.height;
-      scene.style.transform = `scale(1.02)`;
       glare.style.opacity = '1';
       glare.style.background = `radial-gradient(circle at ${x*100}% ${y*100}%, rgba(255,255,255,0.22) 0%, transparent 65%)`;
     });
