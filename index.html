@@ -224,6 +224,17 @@ body {
 }
 .chart-glass-tooltip .cgt-title { font-size: 12px; font-weight: 700; color: #151F47; margin-bottom: 3px; }
 .chart-glass-tooltip .cgt-body { font-size: 12px; color: #384369; }
+.chart-glass-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -5px; left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px; height: 10px;
+  background: rgba(255,255,255,0.65);
+  border-right: 1px solid rgba(255,255,255,0.85);
+  border-bottom: 1px solid rgba(255,255,255,0.85);
+  box-shadow: 2px 2px 3px rgba(0,0,0,0.06);
+}
 .chart-placeholder canvas { max-width: 100%; max-height: 100%; }
 /* Services */
 .services-section { margin-top: 36px; }
@@ -1214,13 +1225,27 @@ function initDashboardCharts() {
     el.style.opacity = '1';
   }
   function hideGT(chart) { const el=_gtEls[chart.id]; if(el) el.style.opacity='0'; }
+  function _dimCharts(active) {
+    [_jubilacion,_colaboradores,_desahucio].forEach(c => {
+      if (!c) return;
+      const card = c.canvas.closest('.chart-card');
+      if (card) { card.style.transition='opacity 0.2s'; card.style.opacity=(c===active)?'1':'0.5'; }
+    });
+  }
+  function _restoreCharts() {
+    [_jubilacion,_colaboradores,_desahucio].forEach(c => {
+      if (!c) return;
+      const card = c.canvas.closest('.chart-card');
+      if (card) { card.style.transition='opacity 0.2s'; card.style.opacity='1'; }
+    });
+  }
   function wireGT(chart) {
     chart.canvas.addEventListener('mousemove', e => {
       const pts = chart.getElementsAtEventForMode(e,'nearest',{intersect:true},true);
-      if (pts.length) showGT(chart, pts[0].index, e.clientX, e.clientY);
-      else hideGT(chart);
+      if (pts.length) { showGT(chart, pts[0].index, e.clientX, e.clientY); _dimCharts(chart); }
+      else { hideGT(chart); _restoreCharts(); }
     });
-    chart.canvas.addEventListener('mouseleave', () => hideGT(chart));
+    chart.canvas.addEventListener('mouseleave', () => { hideGT(chart); _restoreCharts(); });
   }
   const donutTooltip = { enabled: false };
   const labels5=['TS < 10','10 ≤ TS < 15','15 ≤ TS < 20','20 ≤ TS < 25','TS ≥ 25'];
@@ -1268,6 +1293,7 @@ function initDashboardCharts() {
           if (cp) { const r=_desahucio.canvas.getBoundingClientRect(); showGT(_desahucio,idx,r.left+cp.x,r.top+cp.y); }
         } else { hideGT(_desahucio); }
       }
+      _restoreCharts();
     });
   });
 }
