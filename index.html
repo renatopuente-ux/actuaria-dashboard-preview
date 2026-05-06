@@ -416,7 +416,7 @@ body {
   .kpi-grid { grid-template-columns: repeat(2,1fr); gap: 8px; }
   .charts-grid { grid-template-columns: repeat(2,1fr); }
   .services-grid { grid-template-columns: repeat(2,1fr); }
-  .fc-scene { height: 392px; }
+  .fc-scene { height: 400px; }
 }
 
 /* ── md: 768–1023px ── */
@@ -433,7 +433,7 @@ body {
   .kpi-grid { grid-template-columns: repeat(2,1fr); gap: 8px; }
   .charts-grid { grid-template-columns: repeat(2,1fr); }
   .services-grid { grid-template-columns: repeat(2,1fr); }
-  .fc-scene { height: 372px; }
+  .fc-scene { height: 380px; }
   .content-inner { padding: 16px; }
 }
 
@@ -452,7 +452,7 @@ body {
   .kpi-grid { grid-template-columns: repeat(2,1fr); gap: 6px; }
   .charts-grid { grid-template-columns: repeat(2,1fr); gap: 6px; }
   .services-grid { grid-template-columns: 1fr; }
-  .fc-scene { height: 352px; }
+  .fc-scene { height: 360px; }
   .content-inner { padding: 12px; margin-top: 8px; }
   .section-header-row { flex-direction: column; gap: 8px; }
   .scroll-to-services { display: none; }
@@ -472,7 +472,7 @@ body {
   .greeting-section h1 { font-size: var(--fs-h5); }
   .module-tabs { gap: 4px; }
   .module-tab { font-size: var(--fs-xs); padding: 0 10px; height: 28px; }
-  .fc-scene { height: 332px; }
+  .fc-scene { height: 340px; }
   .content-inner { padding: 10px; }
 }
 
@@ -491,7 +491,7 @@ body {
 /* ── 3xl: 1920–2559px (FHD / ≈ 6MP) ── */
 @media (min-width: 1920px) {
   :root {
-    --sidebar-width: 360px;
+    --sidebar-width: 320px;
     --fs-base:  18px;
     --fs-sm:    18px;
     --fs-xs:    14px;
@@ -502,7 +502,7 @@ body {
   .charts-grid { gap: 16px; }
   .services-grid { grid-template-columns: repeat(3,1fr); gap: 20px; }
   .content-inner { padding: 40px; }
-  .fc-scene { height: 432px; }
+  .fc-scene { height: 440px; }
 }
 
 /* ── 4xl: 2560px+ (QHD / ≈ 8–16MP) ── */
@@ -520,7 +520,7 @@ body {
   .charts-grid { gap: 20px; }
   .services-grid { gap: 24px; }
   .content-inner { padding: 56px; }
-  .fc-scene { height: 512px; }
+  .fc-scene { height: 520px; }
 }
 
 /* ===== variant-a.css ===== */
@@ -580,7 +580,7 @@ body {
 .ic-red    .ic-action:hover { background: #fecaca; }
 
 /* ─── CardFeatured v2 — Flip Card Design (referencia Estudio Actuarial) ─── */
-.fc-scene { perspective: 1800px; height: 372px; position: relative; }
+.fc-scene { perspective: 1800px; height: 380px; position: relative; }
 .fc-glare { position: absolute; inset: 0; border-radius: 16px; pointer-events: none; z-index: 50; opacity: 0; transition: opacity 0.4s ease; }
 .fc-card {
   width: 100%; height: 100%; position: relative;
@@ -683,7 +683,7 @@ body {
   font-size: var(--fs-base); font-weight: 700; color: rgba(0,6,38,0.9);
   margin: 0 0 6px; line-height: 1.3; letter-spacing: -0.2px;
 }
-.fc-desc { font-size: var(--fs-xs); color: rgba(0,9,51,0.65); line-height: 1.5; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.fc-desc { font-size: var(--fs-xs); color: rgba(0,9,51,0.65); line-height: 1.5; flex: 1; }
 .fc-badges { display: flex; gap: 5px; flex-wrap: wrap; margin: 8px 0 0; }
 .fc-badge {
   font-size: var(--fs-xs); font-weight: 700; padding: 3px 8px; border-radius: 9999px;
