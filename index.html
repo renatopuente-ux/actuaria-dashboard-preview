@@ -196,7 +196,7 @@ body {
 .charts-grid { display: grid; grid-template-columns: minmax(170px, 200px) repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
 .legend-card { display: flex; flex-direction: column; }
 .legend-card .chart-body { flex: 1; display: flex; }
-#legend-shared { flex: 1; display: flex; flex-direction: column; justify-content: space-around; width: 100%; }
+#legend-shared { flex: 1; display: flex; flex-direction: column; justify-content: space-around; width: 100%; gap: 6px; }
 #legend-shared .chart-legend-item { font-size: var(--fs-xs); }
 .chart-card { background: var(--surface); border-radius: 16px; box-shadow: var(--shadow-card); overflow: hidden; display: flex; flex-direction: column; }
 .chart-card .chart-body { margin-top: auto; }
@@ -225,7 +225,7 @@ body {
   transition: box-shadow 0.2s ease, transform 0.15s ease;
 }
 #legend-shared .chart-legend-item:hover {
-  box-shadow: 3px 3px 7px rgba(21,31,71,0.15), -3px -3px 7px rgba(255,255,255,1);
+  box-shadow: 6px 6px 12px rgba(21,31,71,0.25), -4px -4px 8px rgba(255,255,255,1);
 }
 #legend-shared .chart-legend-item.legend-active {
   background: #f4f5f9;
