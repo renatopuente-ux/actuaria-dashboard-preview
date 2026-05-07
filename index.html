@@ -502,13 +502,14 @@ body {
 /* ── 3xl: 1920–2559px (FHD / ≈ 6MP) ── */
 @media (min-width: 1920px) {
   :root {
-    --sidebar-width: 320px;
+    --sidebar-width: 352px;
     --fs-base:  18px;
     --fs-sm:    18px;
     --fs-xs:    14px;
     --fs-h6:   30px;
     --fs-h5:   50px;
   }
+  .main-area { padding-left: calc(var(--sidebar-width) + 36px); }
   .kpi-grid { grid-template-columns: repeat(4,1fr); gap: 16px; }
   .charts-grid { gap: 16px; }
   .services-grid { grid-template-columns: repeat(3,1fr); gap: 20px; }
