@@ -314,14 +314,25 @@ body {
   transform: translateX(-120%);
   opacity: 0;
   pointer-events: none;
-  visibility: hidden;
 }
 .app-layout.data-fullscreen #top-header {
   transform: translateY(-120%);
   opacity: 0;
   pointer-events: none;
-  visibility: hidden;
-  transition: none;
+}
+
+/* Fase 1 collapse: slide-in mientras el layout sigue en fullscreen */
+.app-layout.data-fs-in .sidebar {
+  transform: translateX(0);
+  opacity: 1;
+}
+.app-layout.data-fs-in #top-header {
+  transform: translateY(0);
+  opacity: 1;
+}
+.app-layout.data-fs-in .greeting-section {
+  opacity: 1;
+  transform: translateY(0);
 }
 .app-layout.data-fullscreen .main-area { padding-left: 0; transition: padding-left 400ms cubic-bezier(0.4,0,0.2,1); }
 .app-layout.data-fullscreen .content-area {
@@ -339,7 +350,7 @@ body {
 
 /* Transición top-header base */
 #top-header {
-  transition: transform 370ms cubic-bezier(0.4, 0, 0.2, 1), opacity 320ms ease;
+  transition: transform 420ms cubic-bezier(0.4, 0, 0.2, 1), opacity 380ms ease;
   will-change: transform, opacity;
 }
 /* Transición greeting base */
@@ -1538,12 +1549,13 @@ document.getElementById('expand-data-btn').addEventListener('click', () => {
 });
 document.getElementById('collapse-data-btn').addEventListener('click', () => {
   const layout = document.querySelector('.app-layout');
-  layout.classList.remove('data-fullscreen');
-  // Pequeño delay para que el sidebar y header vuelvan con su transición
-  requestAnimationFrame(() => {
-    layout.style.setProperty('--fs-restore', '1');
-    setTimeout(() => layout.style.removeProperty('--fs-restore'), 450);
-  });
+  // Fase 1: sidebar y navbar se deslizan de regreso mientras el layout sigue en fullscreen
+  layout.classList.add('data-fs-in');
+  // Fase 2: restaurar layout normal después de que termine la animación
+  setTimeout(() => {
+    layout.classList.remove('data-fullscreen');
+    layout.classList.remove('data-fs-in');
+  }, 430);
 });
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') document.querySelector('.app-layout').classList.remove('data-fullscreen');
