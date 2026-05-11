@@ -273,12 +273,32 @@ body {
 .whatsapp-fab:hover { transform: scale(1.1); }
 .actuarin-v2-fab { position: fixed; bottom: 82px; right: 24px; width: 48px; height: 48px; border-radius: 50%; background: var(--primary, #151f47); color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(21,31,71,0.35); z-index: 100; transition: transform 0.2s; border: none; cursor: pointer; }
 .actuarin-v2-fab:hover { transform: scale(1.1); }
-.actuarin-v2-panel { position: fixed; bottom: 140px; right: 24px; width: 300px; height: 300px; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(21,31,71,0.25); z-index: 101; display: none; flex-direction: column; border: 1px solid rgba(21,31,71,0.12); }
+.actuarin-v2-panel { position: fixed; bottom: 140px; right: 24px; width: 320px; height: 520px; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(21,31,71,0.25); z-index: 101; display: none; flex-direction: column; border: 1px solid rgba(21,31,71,0.12); background: #0d1024; }
 .actuarin-v2-panel.open { display: flex; }
-.actuarin-v2-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--primary, #151f47); color: white; font-size: 13px; font-weight: 600; flex-shrink: 0; }
-.actuarin-v2-close { background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 2px; border-radius: 4px; opacity: 0.8; transition: opacity 0.15s; }
-.actuarin-v2-close:hover { opacity: 1; }
-.actuarin-v2-panel iframe { flex: 1; width: 100%; border: none; }
+.actuarin-v2-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #151f47; color: white; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+.actuarin-v2-header-left { display: flex; align-items: center; gap: 8px; }
+.actuarin-v2-header-left span.dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; display: inline-block; }
+.actuarin-v2-close { background: none; border: none; color: rgba(255,255,255,0.7); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; border-radius: 6px; transition: background 0.15s; }
+.actuarin-v2-close:hover { background: rgba(255,255,255,0.12); color: white; }
+.actuarin-v2-spline { width: 100%; height: 200px; flex-shrink: 0; }
+.actuarin-v2-spline iframe { width: 100%; height: 100%; border: none; display: block; }
+.actuarin-v2-messages { flex: 1; overflow-y: auto; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; scroll-behavior: smooth; }
+.actuarin-v2-messages::-webkit-scrollbar { width: 4px; }
+.actuarin-v2-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+.actuarin-msg { max-width: 85%; padding: 8px 12px; border-radius: 12px; font-size: 12px; line-height: 1.5; }
+.actuarin-msg.bot { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9); border-bottom-left-radius: 4px; align-self: flex-start; }
+.actuarin-msg.user { background: #4c64d9; color: white; border-bottom-right-radius: 4px; align-self: flex-end; }
+.actuarin-msg.typing { color: rgba(255,255,255,0.45); font-style: italic; }
+.actuarin-v2-chips { display: flex; gap: 6px; padding: 6px 12px; overflow-x: auto; flex-shrink: 0; }
+.actuarin-v2-chips::-webkit-scrollbar { display: none; }
+.actuarin-chip { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); font-size: 11px; padding: 5px 10px; border-radius: 20px; white-space: nowrap; cursor: pointer; transition: background 0.15s; flex-shrink: 0; }
+.actuarin-chip:hover { background: rgba(76,100,217,0.35); border-color: #4c64d9; color: white; }
+.actuarin-v2-input-row { display: flex; align-items: center; gap: 6px; padding: 8px 12px 10px; flex-shrink: 0; border-top: 1px solid rgba(255,255,255,0.08); }
+.actuarin-v2-input { flex: 1; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 8px 14px; color: white; font-size: 12px; outline: none; transition: border-color 0.15s; }
+.actuarin-v2-input::placeholder { color: rgba(255,255,255,0.35); }
+.actuarin-v2-input:focus { border-color: rgba(76,100,217,0.6); }
+.actuarin-v2-send { background: #4c64d9; border: none; border-radius: 50%; width: 32px; height: 32px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s; }
+.actuarin-v2-send:hover { background: #3a50c4; }
 .section-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; gap: 12px; }
 .section-header-row .data-section-title { margin-bottom: 0; }
 .section-title-group { display: flex; align-items: center; gap: 10px; }
@@ -1275,12 +1295,31 @@ function buildWhatsAppFab() {
   return `
     <div class="actuarin-v2-panel" id="actuarin-v2-panel">
       <div class="actuarin-v2-header">
-        <span>Actuarín</span>
+        <div class="actuarin-v2-header-left">
+          <span class="dot"></span>
+          <span>Actuarín</span>
+        </div>
         <button class="actuarin-v2-close" onclick="toggleActuarinV2()" title="Cerrar">
           <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
       </div>
-      <iframe src="https://my.spline.design/untitled-8MsqqVRmEIvtv7AKC0hGD8iN/" frameborder="0" width="100%" height="100%"></iframe>
+      <div class="actuarin-v2-spline">
+        <iframe src="https://my.spline.design/untitled-8MsqqVRmEIvtv7AKC0hGD8iN/" frameborder="0" width="100%" height="100%"></iframe>
+      </div>
+      <div class="actuarin-v2-messages" id="actuarin-v2-messages">
+        <div class="actuarin-msg bot">¡Hola! Soy Actuarín 👋 ¿En qué puedo ayudarte hoy?</div>
+      </div>
+      <div class="actuarin-v2-chips" id="actuarin-v2-chips">
+        <button class="actuarin-chip" onclick="sendActuarinChip('¿Qué es Actuarín?')">¿Qué es Actuarín?</button>
+        <button class="actuarin-chip" onclick="sendActuarinChip('¿Cómo funciona?')">¿Cómo funciona?</button>
+        <button class="actuarin-chip" onclick="sendActuarinChip('Ver productos')">Ver productos</button>
+      </div>
+      <div class="actuarin-v2-input-row">
+        <input class="actuarin-v2-input" id="actuarin-v2-input" type="text" placeholder="Escribe un mensaje..." onkeydown="if(event.key==='Enter')sendActuarinMsg()" />
+        <button class="actuarin-v2-send" onclick="sendActuarinMsg()" title="Enviar">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
     </div>
     <button class="actuarin-v2-fab" onclick="toggleActuarinV2()" title="Chatear con Actuarín">
       <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M12 2C6.48 2 2 6.02 2 11c0 2.86 1.37 5.42 3.5 7.11V22l3.83-2.12C10.56 20.27 11.27 20.36 12 20.36c5.52 0 10-4.02 10-9s-4.48-9-10-9zm1 12.09l-2.59-2.76-5.05 2.76 5.56-5.9 2.59 2.76 5.04-2.76-5.55 5.9z"/></svg>
@@ -1291,6 +1330,51 @@ function buildWhatsAppFab() {
 function toggleActuarinV2() {
   const panel = document.getElementById('actuarin-v2-panel');
   if (panel) panel.classList.toggle('open');
+}
+
+function sendActuarinMsg() {
+  const input = document.getElementById('actuarin-v2-input');
+  const text = input ? input.value.trim() : '';
+  if (!text) return;
+  _actuarinAppendMsg(text, 'user');
+  input.value = '';
+  _actuarinBotReply(text);
+}
+
+function sendActuarinChip(text) {
+  _actuarinAppendMsg(text, 'user');
+  const chips = document.getElementById('actuarin-v2-chips');
+  if (chips) chips.style.display = 'none';
+  _actuarinBotReply(text);
+}
+
+function _actuarinAppendMsg(text, role) {
+  const container = document.getElementById('actuarin-v2-messages');
+  if (!container) return;
+  const msg = document.createElement('div');
+  msg.className = 'actuarin-msg ' + role;
+  msg.textContent = text;
+  container.appendChild(msg);
+  container.scrollTop = container.scrollHeight;
+}
+
+function _actuarinBotReply(question) {
+  const container = document.getElementById('actuarin-v2-messages');
+  if (!container) return;
+  const typing = document.createElement('div');
+  typing.className = 'actuarin-msg bot typing';
+  typing.textContent = 'Actuarín está escribiendo…';
+  container.appendChild(typing);
+  container.scrollTop = container.scrollHeight;
+  const q = question.toLowerCase();
+  let reply = 'Puedo ayudarte con información sobre Actuaria Plus, Data Wave y Data Analytics. ¿Qué necesitas?';
+  if (q.includes('actuarín') || q.includes('actuarin')) reply = 'Soy Actuarín, el asistente virtual de Actuaria Consultores. Estoy aquí para ayudarte con tus productos actuariales.';
+  else if (q.includes('cómo funciona') || q.includes('como funciona')) reply = 'Es muy sencillo: accede a tu módulo, carga tus datos y obtienes resultados en tiempo real. ¿Quieres que te guíe paso a paso?';
+  else if (q.includes('producto') || q.includes('ver productos')) reply = 'Ofrecemos: Actuaria Plus (cálculo actuarial), Data Wave (dashboards) y Data Analytics (modelos ML). ¿Cuál te interesa?';
+  setTimeout(() => {
+    typing.remove();
+    _actuarinAppendMsg(reply, 'bot');
+  }, 900);
 }
 
 function toggleNav(btn) {
