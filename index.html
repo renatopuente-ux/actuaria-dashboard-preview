@@ -271,7 +271,7 @@ body {
 .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .whatsapp-fab { position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px; border-radius: 50%; background: var(--secondary); color: white; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 4px 12px rgba(37,211,102,0.4); z-index: 100; transition: transform 0.2s; border: none; cursor: pointer; }
 .whatsapp-fab:hover { transform: scale(1.1); }
-.actuarin-v2-fab { position: fixed; bottom: 82px; right: 24px; width: 48px; height: 48px; border-radius: 50%; background: var(--primary, #151f47); color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(21,31,71,0.35); z-index: 100; transition: transform 0.2s; border: none; cursor: pointer; }
+.actuarin-v2-fab { position: fixed; bottom: 82px; right: 24px; width: 48px; height: 48px; border-radius: 50%; background: #ffffff; color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(21,31,71,0.25); z-index: 100; transition: transform 0.2s; border: none; cursor: pointer; }
 .actuarin-v2-fab:hover { transform: scale(1.1); }
 .actuarin-v2-panel { position: fixed; bottom: 140px; right: 24px; width: 320px; height: 520px; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(21,31,71,0.25); z-index: 101; display: none; flex-direction: column; border: 1px solid rgba(21,31,71,0.12); background: #0d1024; }
 .actuarin-v2-panel.open { display: flex; }
@@ -1322,7 +1322,11 @@ function buildWhatsAppFab() {
       </div>
     </div>
     <button class="actuarin-v2-fab" onclick="toggleActuarinV2()" title="Chatear con Actuarín">
-      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M12 2C6.48 2 2 6.02 2 11c0 2.86 1.37 5.42 3.5 7.11V22l3.83-2.12C10.56 20.27 11.27 20.36 12 20.36c5.52 0 10-4.02 10-9s-4.48-9-10-9zm1 12.09l-2.59-2.76-5.05 2.76 5.56-5.9 2.59 2.76 5.04-2.76-5.55 5.9z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="31" viewBox="0 0 27 38" fill="none">
+        <path d="M0 26.3313H10.2925V7.1817C10.2925 7.1817 8.3217 16.7542 0 26.3313Z" fill="#E0592A"/>
+        <path d="M12.0833 0C20.4512 2.88006 26.4467 10.1817 26.4467 19.3204C26.4467 21.7758 26.0128 24.1343 25.219 26.3267H12.088V0H12.0833Z" fill="#111C4E"/>
+        <path d="M5.14629 37.6992C12.9095 37.6992 20.6635 33.8499 24.2959 28.1267H5.14629V37.6992Z" fill="#385CAD"/>
+      </svg>
     </button>
     <a class="whatsapp-fab" href="#" title="Escríbenos a WhatsApp">${ICONS.whatsapp}</a>`;
 }
