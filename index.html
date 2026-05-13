@@ -271,11 +271,11 @@ body {
 .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .whatsapp-fab { position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px; border-radius: 50%; background: var(--secondary); color: white; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 4px 12px rgba(37,211,102,0.4); z-index: 100; transition: transform 0.2s; border: none; cursor: pointer; }
 .whatsapp-fab:hover { transform: scale(1.1); }
-.actuarin-v4-trigger { position: fixed; bottom: 118px; right: 0; width: 350px; height: 350px; z-index: 101; outline: 2px solid red; }
-.actuarin-v4-trigger iframe { width: 100%; height: 100%; border: none; display: block; }
+.actuarin-v4-trigger { position: fixed; bottom: 80px; right: 0; width: 350px; height: 350px; z-index: 101; outline: 2px solid red; overflow: hidden; }
+.actuarin-v4-trigger iframe { width: 200%; height: 200%; border: none; display: block; transform: translate(-50%, -50%); transform-origin: top left; }
 .actuarin-v4-chat-btn { position: fixed; bottom: 80px; right: 4px; z-index: 103; background: #151f47; color: white; border: none; border-radius: 20px; padding: 5px 10px 5px 8px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 8px rgba(21,31,71,0.4); transition: background 0.15s; font-family: inherit; }
 .actuarin-v4-chat-btn:hover { background: #4c64d9; }
-.actuarin-v4-panel { position: fixed; bottom: 476px; right: 0; width: 320px; height: 480px; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(21,31,71,0.35); z-index: 102; display: none; flex-direction: column; border: 1px solid rgba(21,31,71,0.18); background: #0d1024; }
+.actuarin-v4-panel { position: fixed; bottom: 438px; right: 0; width: 320px; height: 480px; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(21,31,71,0.35); z-index: 102; display: none; flex-direction: column; border: 1px solid rgba(21,31,71,0.18); background: #0d1024; }
 .actuarin-v4-panel.open { display: flex; }
 .actuarin-v4-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #151f47; color: white; font-size: 13px; font-weight: 600; flex-shrink: 0; }
 .actuarin-v4-header-left { display: flex; align-items: center; gap: 8px; }
